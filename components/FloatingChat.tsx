@@ -84,7 +84,7 @@ export function FloatingChat() {
           role="dialog"
           aria-label="Carbon coach chat"
           aria-modal="false"
-          className="fixed bottom-24 right-4 z-50 flex h-[70vh] max-h-[560px] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-brand-100 bg-white shadow-2xl sm:right-6"
+          className="fixed bottom-36 right-4 z-50 flex h-[70vh] max-h-[560px] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-brand-100 bg-white shadow-2xl sm:bottom-24 sm:right-6"
         >
           {/* Header */}
           <div className="flex items-center gap-3 bg-gradient-to-r from-brand-700 to-brand-500 px-4 py-3 text-white">
@@ -237,7 +237,7 @@ export function FloatingChat() {
         onClick={() => setOpen((o) => !o)}
         aria-label={open ? 'Close carbon coach chat' : 'Open carbon coach chat'}
         aria-expanded={open}
-        className="fixed bottom-5 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand-600 to-brand-700 text-white shadow-lg transition hover:scale-105 hover:shadow-xl sm:right-6"
+        className="fixed bottom-20 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand-600 to-brand-700 text-white shadow-lg transition hover:scale-105 hover:shadow-xl sm:bottom-5 sm:right-6"
       >
         {open ? (
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">

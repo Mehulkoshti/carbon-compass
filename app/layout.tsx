@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import Link from 'next/link';
 import { Inter, Sora } from 'next/font/google';
+import { BottomNav } from '@/components/BottomNav';
 import { FloatingChat } from '@/components/FloatingChat';
 import { ServiceWorkerRegister } from '@/components/ServiceWorkerRegister';
 import { ToastProvider } from '@/components/Toast';
@@ -77,9 +78,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               >
                 🧭
               </span>
-              <span className="hidden sm:inline">CarbonCompass</span>
+              <span>CarbonCompass</span>
             </Link>
-            <div className="flex items-center gap-0.5 text-xs font-medium sm:text-sm">
+            <div className="hidden items-center gap-0.5 text-sm font-medium sm:flex">
               {[
                 ['/calculator', 'Calculator'],
                 ['/simulate', 'Simulate'],
@@ -89,7 +90,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Link
                   key={href}
                   href={href}
-                  className="rounded-lg px-2 py-1.5 text-slate-600 transition hover:bg-brand-50 hover:text-brand-700 sm:px-3"
+                  className="rounded-lg px-3 py-1.5 text-slate-600 transition hover:bg-brand-50 hover:text-brand-700"
                 >
                   {label}
                 </Link>
@@ -98,12 +99,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </nav>
         </header>
 
-        <main id="main" className="mx-auto w-full max-w-5xl flex-1 px-4 py-10">
+        <main id="main" className="mx-auto w-full max-w-5xl flex-1 px-4 pt-10 pb-28 sm:pb-10">
           {children}
         </main>
 
         <footer className="border-t border-brand-100 bg-white">
-          <div className="mx-auto max-w-5xl px-4 py-6 text-sm text-slate-500">
+          <div className="mx-auto max-w-5xl px-4 pb-24 pt-6 text-sm text-slate-500 sm:pb-6">
             <p>
               CarbonCompass · Estimates are for awareness only. Built for the
               Carbon Footprint Awareness challenge.
@@ -113,6 +114,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* Floating AI coach, available on every page */}
         <FloatingChat />
+        {/* App-style bottom tab bar (mobile only) */}
+        <BottomNav />
         <ServiceWorkerRegister />
         </ToastProvider>
       </body>
