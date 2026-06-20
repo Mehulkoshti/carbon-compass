@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ActionTracker } from '@/components/ActionTracker';
-import { BarChart } from '@/components/BarChart';
+import { DonutChart } from '@/components/DonutChart';
 import { CoachPanel } from '@/components/CoachPanel';
 import { Gauge } from '@/components/Gauge';
 import { ProgressTracker } from '@/components/ProgressTracker';
@@ -181,7 +181,7 @@ export default function DashboardPage() {
             Your annual footprint is about <strong>{result.totalAnnual} kg CO₂e</strong>.
           </p>
           <div className="mt-5">
-            <BarChart breakdown={result.breakdown} total={result.totalMonthly} />
+            <DonutChart breakdown={result.breakdown} total={result.totalMonthly} />
           </div>
         </section>
 

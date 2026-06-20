@@ -1,14 +1,14 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { BarChart } from '@/components/BarChart';
+import { DonutChart } from '@/components/DonutChart';
 import { RadioGroup } from '@/components/forms';
 import { ProgressTracker } from '@/components/ProgressTracker';
 
-describe('BarChart', () => {
+describe('DonutChart', () => {
   it('exposes the data in an accessible table', () => {
     render(
-      <BarChart
+      <DonutChart
         breakdown={{ transport: 200, home: 80, food: 150, lifestyle: 90 }}
         total={520}
       />,
