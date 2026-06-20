@@ -11,7 +11,7 @@ html {
 }
 
 body {
-  @apply text-slate-800 antialiased;
+  @apply overflow-x-hidden text-slate-800 antialiased;
   background:
     radial-gradient(1100px 520px at 100% -8%, #d1fae5 0%, transparent 58%),
     radial-gradient(900px 500px at -10% 6%, #e7fff4 0%, transparent 52%),

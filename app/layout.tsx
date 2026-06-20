@@ -48,6 +48,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
   themeColor: '#059669',
 };
 
@@ -65,16 +67,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             aria-label="Primary"
             className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3"
           >
-            <Link href="/" className="flex items-center gap-2 font-display text-lg font-bold text-brand-700">
+            <Link
+              href="/"
+              className="flex shrink-0 items-center gap-2 font-display text-lg font-bold text-brand-700"
+            >
               <span
                 aria-hidden="true"
                 className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 text-base shadow-soft"
               >
                 🧭
               </span>
-              CarbonCompass
+              <span className="hidden sm:inline">CarbonCompass</span>
             </Link>
-            <div className="flex items-center gap-0.5 text-sm font-medium">
+            <div className="flex items-center gap-0.5 text-xs font-medium sm:text-sm">
               {[
                 ['/calculator', 'Calculator'],
                 ['/simulate', 'Simulate'],
@@ -84,7 +89,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Link
                   key={href}
                   href={href}
-                  className="rounded-lg px-2.5 py-1.5 text-slate-600 transition hover:bg-brand-50 hover:text-brand-700 sm:px-3"
+                  className="rounded-lg px-2 py-1.5 text-slate-600 transition hover:bg-brand-50 hover:text-brand-700 sm:px-3"
                 >
                   {label}
                 </Link>
