@@ -2,64 +2,44 @@
 
 import { useId, useState } from 'react';
 
-const ALLOWED = ['image/png', 'image/jpeg', 'image/webp'];
-const MAX_BYTES = 5 * 1024 * 1024; // 5MB
+import { useImageUpload } from '@/lib/useImageUpload';
 
-function readAsDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = () => reject(new Error('read-failed'));
-    reader.readAsDataURL(file);
-  });
-}
+type Status = 'idle' | 'loading' | 'ok' | 'error';
 
 /**
  * Uploads an electricity-bill photo to the Vision endpoint and reports the
- * detected monthly kWh back to the parent via `onExtract`. Validates type/size
- * client-side and surfaces status to the user.
+ * detected monthly kWh back to the parent via `onExtract`. Validation and
+ * upload are handled by the shared {@link useImageUpload} hook.
  */
 export function BillScan({ onExtract }: { onExtract: (kwh: number) => void }) {
   const inputId = useId();
-  const [status, setStatus] = useState<'idle' | 'loading' | 'ok' | 'error'>('idle');
+  const { loading, validate, upload } = useImageUpload('/api/scan-bill');
+  const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState('');
 
   async function handleFile(file: File | undefined) {
     if (!file) return;
-    if (!ALLOWED.includes(file.type)) {
+    const invalid = validate(file);
+    if (invalid) {
       setStatus('error');
-      setMessage('Please upload a PNG, JPEG or WebP image.');
-      return;
-    }
-    if (file.size > MAX_BYTES) {
-      setStatus('error');
-      setMessage('Image is too large (max 5MB).');
+      setMessage(invalid);
       return;
     }
 
     setStatus('loading');
     setMessage('Reading your bill…');
-    try {
-      const dataUrl = await readAsDataUrl(file);
-      const res = await fetch('/api/scan-bill', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ imageBase64: dataUrl, mimeType: file.type }),
-      });
-      const data = await res.json();
-      if (res.ok && typeof data?.kwh === 'number') {
-        onExtract(data.kwh);
-        setStatus('ok');
-        setMessage(
-          `Detected ${data.kwh} kWh/month (${data.confidence} confidence). Adjust below if needed.`,
-        );
-      } else {
-        setStatus('error');
-        setMessage(data?.error || "Couldn't read the value — please type it below.");
-      }
-    } catch {
+    const { ok, data } = await upload(file);
+    const result = data as { kwh?: number; confidence?: string; error?: string } | null;
+
+    if (ok && typeof result?.kwh === 'number') {
+      onExtract(result.kwh);
+      setStatus('ok');
+      setMessage(
+        `Detected ${result.kwh} kWh/month (${result.confidence} confidence). Adjust below if needed.`,
+      );
+    } else {
       setStatus('error');
-      setMessage('Something went wrong — please type your usage below.');
+      setMessage(result?.error || "Couldn't read the value — please type it below.");
     }
   }
 
@@ -75,9 +55,9 @@ export function BillScan({ onExtract }: { onExtract: (kwh: number) => void }) {
         id={inputId}
         type="file"
         accept="image/png,image/jpeg,image/webp"
-        disabled={status === 'loading'}
+        disabled={loading}
         onChange={(e) => handleFile(e.target.files?.[0])}
-        className="mt-2 block w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-brand-700 file:px-4 file:py-2 file:text-white hover:file:bg-brand-700"
+        className="mt-2 block w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-brand-700 file:px-4 file:py-2 file:text-white hover:file:bg-brand-800"
       />
       {message ? (
         <p

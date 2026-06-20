@@ -3,72 +3,55 @@
 import { useId, useState } from 'react';
 
 import { useToast } from '@/components/Toast';
-
-const ALLOWED = ['image/png', 'image/jpeg', 'image/webp'];
-const MAX_BYTES = 5 * 1024 * 1024;
+import { useImageUpload } from '@/lib/useImageUpload';
 
 interface MealItem {
   name: string;
   kg: number;
 }
 
-function readAsDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = () => reject(new Error('read-failed'));
-    reader.readAsDataURL(file);
-  });
+interface MealResponse {
+  items?: MealItem[];
+  totalKg?: number;
+  note?: string;
+  error?: string;
 }
 
 /**
  * Uploads a meal/grocery photo to the Vision endpoint and shows an itemized
- * food-carbon estimate. Validates type/size client-side; toasts on result.
+ * food-carbon estimate. Validation and upload are handled by the shared
+ * {@link useImageUpload} hook; results are surfaced via toasts.
  */
 export function MealScan() {
   const inputId = useId();
   const toast = useToast();
-  const [loading, setLoading] = useState(false);
+  const { loading, validate, upload } = useImageUpload('/api/scan-meal');
   const [items, setItems] = useState<MealItem[] | null>(null);
   const [total, setTotal] = useState(0);
   const [note, setNote] = useState('');
 
   async function handleFile(file: File | undefined) {
     if (!file) return;
-    if (!ALLOWED.includes(file.type)) {
-      toast('Please upload a PNG, JPEG or WebP image.', 'error');
-      return;
-    }
-    if (file.size > MAX_BYTES) {
-      toast('Image is too large (max 5MB).', 'error');
+    const invalid = validate(file);
+    if (invalid) {
+      toast(invalid, 'error');
       return;
     }
 
-    setLoading(true);
     setItems(null);
-    try {
-      const dataUrl = await readAsDataUrl(file);
-      const res = await fetch('/api/scan-meal', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ imageBase64: dataUrl, mimeType: file.type }),
-      });
-      const data = await res.json();
-      if (res.ok && Array.isArray(data.items)) {
-        setItems(data.items);
-        setTotal(data.totalKg ?? 0);
-        setNote(data.note ?? '');
-        toast(
-          data.items.length ? 'Meal analyzed' : 'No food detected',
-          data.items.length ? 'success' : 'info',
-        );
-      } else {
-        toast(data?.error || 'Could not analyze the photo.', 'error');
-      }
-    } catch {
-      toast('Something went wrong — please try again.', 'error');
-    } finally {
-      setLoading(false);
+    const { ok, data } = await upload(file);
+    const result = data as MealResponse | null;
+
+    if (ok && Array.isArray(result?.items)) {
+      setItems(result.items);
+      setTotal(result.totalKg ?? 0);
+      setNote(result.note ?? '');
+      toast(
+        result.items.length ? 'Meal analyzed' : 'No food detected',
+        result.items.length ? 'success' : 'info',
+      );
+    } else {
+      toast(result?.error || 'Could not analyze the photo.', 'error');
     }
   }
 
@@ -93,7 +76,7 @@ export function MealScan() {
         accept="image/png,image/jpeg,image/webp"
         disabled={loading}
         onChange={(e) => handleFile(e.target.files?.[0])}
-        className="mt-4 block w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-brand-700 file:px-4 file:py-2 file:text-white hover:file:bg-brand-700"
+        className="mt-4 block w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-brand-700 file:px-4 file:py-2 file:text-white hover:file:bg-brand-800"
       />
 
       {loading ? (
@@ -117,7 +100,7 @@ export function MealScan() {
               </li>
             ))}
           </ul>
-          {note ? <p className="mt-2 text-xs text-slate-400">{note}</p> : null}
+          {note ? <p className="mt-2 text-xs text-slate-500">{note}</p> : null}
         </div>
       ) : null}
 
