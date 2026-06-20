@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Inter, Sora } from 'next/font/google';
 import { BottomNav } from '@/components/BottomNav';
@@ -72,12 +73,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               href="/"
               className="flex shrink-0 items-center gap-2 font-display text-lg font-bold text-brand-700"
             >
-              <span
-                aria-hidden="true"
-                className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 text-base shadow-soft"
-              >
-                🧭
-              </span>
+              <Image
+                src="/icon-192.png"
+                alt=""
+                width={32}
+                height={32}
+                priority
+                className="h-8 w-8 rounded-lg shadow-soft"
+              />
               <span>CarbonCompass</span>
             </Link>
             <div className="hidden items-center gap-0.5 text-sm font-medium sm:flex">
