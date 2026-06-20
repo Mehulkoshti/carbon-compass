@@ -1,0 +1,164 @@
+'use client';
+
+import Link from 'next/link';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
+import { ActionTracker } from '@/components/ActionTracker';
+import { BarChart } from '@/components/BarChart';
+import { CoachPanel } from '@/components/CoachPanel';
+import { rankActions, totalSaving } from '@/lib/actions';
+import { calculateFootprint, FootprintResult, UserProfile } from '@/lib/emissions';
+import { buildRuleBasedCoach, CoachResponse } from '@/lib/insights';
+import { storage } from '@/lib/storage';
+
+export default function DashboardPage() {
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [result, setResult] = useState<FootprintResult | null>(null);
+  const [coach, setCoach] = useState<CoachResponse | null>(null);
+  const [loadingCoach, setLoadingCoach] = useState(false);
+  const [committed, setCommitted] = useState<string[]>([]);
+  const [ready, setReady] = useState(false);
+
+  // Load persisted state on mount.
+  useEffect(() => {
+    const p = storage.loadProfile();
+    if (p) {
+      setProfile(p);
+      setResult(calculateFootprint(p));
+      setCommitted(storage.loadActions());
+    }
+    setReady(true);
+  }, []);
+
+  // Fetch AI insights whenever we have a profile.
+  useEffect(() => {
+    if (!profile || !result) return;
+    let cancelled = false;
+    setLoadingCoach(true);
+    fetch('/api/insights', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ profile }),
+    })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+      .then((data) => {
+        if (!cancelled && data?.coach) setCoach(data.coach);
+      })
+      .catch(() => {
+        // Network/API failure → use the same rule engine the server would.
+        if (!cancelled) setCoach(buildRuleBasedCoach(profile, result));
+      })
+      .finally(() => {
+        if (!cancelled) setLoadingCoach(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [profile, result]);
+
+  const ranked = useMemo(
+    () => (profile && result ? rankActions(profile, result) : []),
+    [profile, result],
+  );
+  const saved = useMemo(
+    () => (profile && result ? totalSaving(committed, profile, result) : 0),
+    [committed, profile, result],
+  );
+
+  const toggle = useCallback(
+    (id: string) => {
+      setCommitted((prev) => {
+        const next = prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id];
+        storage.saveActions(next);
+        return next;
+      });
+    },
+    [],
+  );
+
+  if (!ready) {
+    return <p className="text-slate-500">Loading…</p>;
+  }
+
+  if (!profile || !result) {
+    return (
+      <div className="mx-auto max-w-md rounded-xl border border-brand-100 bg-white p-8 text-center shadow-sm">
+        <h1 className="text-2xl font-bold text-slate-900">No footprint yet</h1>
+        <p className="mt-2 text-slate-600">
+          Take the quick calculator to see your dashboard, insights and actions.
+        </p>
+        <Link
+          href="/calculator"
+          className="mt-6 inline-block rounded-lg bg-brand-600 px-6 py-3 font-semibold text-white hover:bg-brand-700"
+        >
+          Start the calculator
+        </Link>
+      </div>
+    );
+  }
+
+  const { comparison } = result;
+
+  return (
+    <div className="space-y-8">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900">Your dashboard</h1>
+          <p className="mt-1 text-slate-600">Monthly carbon footprint estimate.</p>
+        </div>
+        <Link
+          href="/calculator"
+          className="rounded-lg border border-brand-200 bg-white px-4 py-2 text-sm font-medium text-brand-700 hover:bg-brand-50"
+        >
+          Recalculate
+        </Link>
+      </div>
+
+      {/* Headline numbers */}
+      <div className="grid gap-4 sm:grid-cols-3">
+        <div className="rounded-xl bg-brand-900 p-6 text-brand-50">
+          <p className="text-sm text-brand-100">Your footprint</p>
+          <p className="text-3xl font-extrabold">{result.totalMonthly} kg</p>
+          <p className="text-sm text-brand-100">CO₂e / month</p>
+        </div>
+        <div className="rounded-xl border border-brand-100 bg-white p-6">
+          <p className="text-sm text-slate-500">vs India average</p>
+          <p className="text-3xl font-extrabold text-slate-900">{comparison.vsIndiaPct}%</p>
+          <p className="text-sm text-slate-500">{comparison.indiaAvg} kg/mo average</p>
+        </div>
+        <div className="rounded-xl border border-brand-100 bg-white p-6">
+          <p className="text-sm text-slate-500">vs sustainable target</p>
+          <p className="text-3xl font-extrabold text-slate-900">{comparison.vsParisPct}%</p>
+          <p className="text-sm text-slate-500">{comparison.parisTarget} kg/mo target</p>
+        </div>
+      </div>
+
+      <div className="grid gap-8 lg:grid-cols-2">
+        <section
+          aria-labelledby="breakdown-heading"
+          className="rounded-xl border border-brand-100 bg-white p-6 shadow-sm"
+        >
+          <h2 id="breakdown-heading" className="text-xl font-bold text-slate-900">
+            Where it comes from
+          </h2>
+          <p className="mt-1 text-slate-600">
+            Your annual footprint is about <strong>{result.totalAnnual} kg CO₂e</strong>.
+          </p>
+          <div className="mt-5">
+            <BarChart breakdown={result.breakdown} total={result.totalMonthly} />
+          </div>
+        </section>
+
+        <CoachPanel coach={coach} loading={loadingCoach} />
+      </div>
+
+      <ActionTracker
+        actions={ranked}
+        committed={committed}
+        onToggle={toggle}
+        totalSaved={saved}
+        baseline={result.totalMonthly}
+      />
+    </div>
+  );
+}
