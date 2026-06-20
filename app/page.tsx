@@ -88,7 +88,7 @@ export default function Home() {
               </span>
             </div>
             <div className="mt-4 flex items-center gap-5">
-              <Gauge pct={SAMPLE.pct} centerValue={`${SAMPLE.total}`} centerUnit="kg/mo" size={150} />
+              <Gauge pct={SAMPLE.pct} value={SAMPLE.total} unit="kg/mo" size={150} />
               <ul className="flex-1 space-y-2">
                 {SAMPLE.bars.map(([label, value, color]) => (
                   <li key={label}>

@@ -80,7 +80,9 @@ assistant* — the core of the challenge brief:
 
 The app also ships a dynamic Open Graph image (nice link previews on
 LinkedIn/X), a favicon, and `error` / `loading` / `not-found` route boundaries
-for graceful failure states.
+for graceful failure states. It is an installable **PWA** (web manifest +
+service worker, works offline), with animated gauges/counters and toast
+notifications for a polished feel.
 
 ### Architecture
 

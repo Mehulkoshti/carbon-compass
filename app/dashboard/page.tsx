@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ActionTracker } from '@/components/ActionTracker';
+import { CountUp } from '@/components/CountUp';
 import { DonutChart } from '@/components/DonutChart';
 import { CoachPanel } from '@/components/CoachPanel';
 import { Gauge } from '@/components/Gauge';
@@ -147,8 +148,9 @@ export default function DashboardPage() {
         <div className="flex flex-col items-center rounded-2xl border border-brand-100 bg-white p-6 text-center shadow-soft">
           <Gauge
             pct={comparison.vsParisPct}
-            centerValue={`${result.totalMonthly}`}
-            centerUnit="kg/mo"
+            value={result.totalMonthly}
+            unit="kg/mo"
+            decimals={1}
             size={150}
           />
           <p className="mt-3 text-sm text-slate-500">Your monthly footprint</p>
@@ -156,14 +158,14 @@ export default function DashboardPage() {
         <div className="flex flex-col justify-center rounded-2xl border border-brand-100 bg-white p-6 shadow-soft">
           <p className="text-sm text-slate-500">vs India average</p>
           <p className="font-display text-4xl font-extrabold text-slate-900">
-            {comparison.vsIndiaPct}%
+            <CountUp value={comparison.vsIndiaPct} suffix="%" />
           </p>
           <p className="text-sm text-slate-500">{comparison.indiaAvg} kg/mo average</p>
         </div>
         <div className="flex flex-col justify-center rounded-2xl border border-brand-100 bg-white p-6 shadow-soft">
           <p className="text-sm text-slate-500">vs sustainable target</p>
           <p className="font-display text-4xl font-extrabold text-slate-900">
-            {comparison.vsParisPct}%
+            <CountUp value={comparison.vsParisPct} suffix="%" />
           </p>
           <p className="text-sm text-slate-500">{comparison.parisTarget} kg/mo target</p>
         </div>

@@ -1,7 +1,8 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import Link from 'next/link';
 import { Inter, Sora } from 'next/font/google';
 import { FloatingChat } from '@/components/FloatingChat';
+import { ServiceWorkerRegister } from '@/components/ServiceWorkerRegister';
 import { ToastProvider } from '@/components/Toast';
 import './globals.css';
 
@@ -39,6 +40,15 @@ export const metadata: Metadata = {
     title,
     description,
   },
+  appleWebApp: {
+    capable: true,
+    title: 'CarbonCompass',
+    statusBarStyle: 'default',
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#059669',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -96,6 +106,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* Floating AI coach, available on every page */}
         <FloatingChat />
+        <ServiceWorkerRegister />
         </ToastProvider>
       </body>
     </html>

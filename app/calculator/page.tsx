@@ -239,8 +239,9 @@ export default function CalculatorPage() {
             <div className="mt-3 flex flex-col items-center">
               <Gauge
                 pct={live.comparison.vsParisPct}
-                centerValue={`${live.totalMonthly}`}
-                centerUnit="kg/mo"
+                value={live.totalMonthly}
+                unit="kg/mo"
+                decimals={1}
                 size={160}
               />
               <p className="mt-3 text-center text-sm text-slate-500">
