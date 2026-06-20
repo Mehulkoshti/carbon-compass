@@ -1,175 +1,190 @@
 # 🧭 CarbonCompass
 
-**Understand, track and reduce your personal carbon footprint — with AI-personalized insights.**
+[![CI](https://github.com/Mehulkoshti/carbon-compass/actions/workflows/ci.yml/badge.svg)](https://github.com/Mehulkoshti/carbon-compass/actions/workflows/ci.yml)
+![Next.js](https://img.shields.io/badge/Next.js-14-black)
+![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6)
+![Tests](https://img.shields.io/badge/tests-58%20passing-brightgreen)
+![PWA](https://img.shields.io/badge/PWA-installable-5a0fc8)
 
-CarbonCompass is a web app that turns a person's everyday habits (how they
-travel, power their home, eat and shop) into a clear monthly CO₂e number, shows
-where it comes from, and recommends the **few actions that actually matter most
-for that specific person** — ranked by how much CO₂e each would save *them*.
+![Lighthouse Performance](https://img.shields.io/badge/Lighthouse_Performance-95-success)
+![Lighthouse Accessibility](https://img.shields.io/badge/Accessibility-100-success)
+![Lighthouse Best Practices](https://img.shields.io/badge/Best_Practices-100-success)
+![Lighthouse SEO](https://img.shields.io/badge/SEO-100-success)
 
-Built for the **Carbon Footprint Awareness Platform** challenge.
+**Understand, track and reduce your personal carbon footprint — with AI-powered, context-aware guidance.**
+
+![CarbonCompass](docs/screenshots/hero.jpg)
+
+CarbonCompass turns a person's everyday habits (how they travel, power their home,
+eat and shop) into a clear monthly CO₂e number, shows where it comes from, and gives
+them an AI coach, a what-if simulator and a 30-day plan to bring it down — all in a
+fast, installable, accessible web app.
+
+> Built for the **Carbon Footprint Awareness Platform** challenge.
+
+---
+
+## ✨ Highlights
+
+- 🧮 **State-aware calculator** — a 4-step quiz that uses your **state's real grid
+  emission factor** for an accurate number.
+- 📸 **Bill & meal scanning** — Gemini **Vision** reads your electricity bill's kWh
+  and estimates a meal's food carbon from a photo.
+- 🧭 **Visual dashboard** — animated gauge, donut breakdown, benchmarks.
+- 🌱 **AI insights + 💬 grounded chat coach** — answers based on *your* numbers,
+  never generic; degrades gracefully to a deterministic engine if AI is down.
+- 🎚️ **What-if simulator** — slide through EV / diet / solar / travel and watch your
+  footprint re-project live.
+- 🗓️ **AI 30-day plan** — a checkable, week-by-week reduction roadmap.
+- 📈 **History, streaks, goals & 🏅 achievements** — habit-building gamification.
+- 📤 **Shareable result card**, installable **PWA**, full **accessibility**.
+
+| Landing | Calculator (live estimate) |
+|---|---|
+| ![Landing](docs/screenshots/landing.jpg) | ![Calculator](docs/screenshots/calculator.jpg) |
 
 ---
 
 ## 1. Chosen vertical
 
-**Persona: the everyday urban individual.** Someone who wants to live more
-sustainably but doesn't know *where they stand* or *which single change matters
-most*. Generic "turn off lights" advice doesn't help them prioritize.
-
-CarbonCompass is built around that persona: a fast, friendly, jargon-free
-coach that meets the problem statement head-on — **understand → track → reduce,
+**Persona: the everyday urban individual** who wants to live more sustainably but
+doesn't know *where they stand* or *which single change matters most*. Generic advice
+doesn't help them prioritize. CarbonCompass is a fast, friendly, jargon-free coach
+built around that persona — meeting the brief head-on: **understand → track → reduce,
 through simple actions and personalized insights.**
 
 ## 2. Approach & logic
 
 The core design decision is **separation of maths from language**:
 
-- A pure, fully unit-tested **emission engine** (`lib/emissions.ts`) computes
-  the footprint from published emission factors (IPCC, India CEA grid factor,
-  DEFRA conversion factors, Our World in Data dietary footprints).
-- A **reduction-action engine** (`lib/actions.ts`) estimates, *for the specific
-  user*, how much each action would save — by re-running the same engine. The
-  same action ("carpool 2 days/week") yields a much bigger saving for a heavy
-  commuter than for someone who already takes the metro. **This is the
-  context-aware decision making the challenge asks for.**
-- The **AI coach** (Gemini) only does *framing and prioritization*. It receives
-  the already-computed numbers and candidate actions and writes encouraging,
-  specific guidance — it never invents figures, so insights stay grounded and
-  reproducible.
-- If the AI is unavailable (no key, quota, network), a **deterministic
-  rule-based coach** (`lib/insights.ts`) produces the same response shape, so the
+- A pure, fully unit-tested **emission engine** (`lib/emissions.ts`) computes the
+  footprint from published factors (IPCC, India CEA grid factor, DEFRA, Our World in
+  Data) — using **state-level grid intensity** for electricity.
+- A **reduction-action engine** (`lib/actions.ts`) estimates, *for the specific user*,
+  how much each action saves by re-running the engine — so "carpool 2 days/week" saves
+  a heavy commuter far more than someone who already takes the metro. **This is the
+  context-aware decision-making the challenge asks for.**
+- **Gemini** only does *framing and prioritization* (insights, chat, plan) and
+  **Vision** for image understanding (bill/meal). It never invents the numbers, so
+  output stays grounded and reproducible.
+- Every AI path **degrades gracefully** to a deterministic rule-based engine, so the
   product — and the live demo — never breaks.
 
-## 3. How the solution works
+## 3. Architecture
 
-1. **Calculator** (`/calculator`) — a 4-step, keyboard-accessible quiz
-   (transport, home energy, food, lifestyle). Defaults reflect a typical urban
-   household so users can start instantly.
-2. **Engine** — `calculateFootprint()` returns a per-category breakdown, monthly
-   & annual totals, the top category, and comparisons to the India average,
-   global average and the Paris-aligned sustainable target.
-3. **Dashboard** (`/dashboard`) — headline numbers, an accessible breakdown
-   chart, the personalized coach, and an **action tracker**: tick actions you
-   commit to and watch your projected footprint drop in real time.
-4. **Persistence** — everything is stored in the browser (`localStorage`). No
-   account, no database, no personal data leaves the device.
-
-### Smart-assistant features
-
-These turn CarbonCompass from a calculator into a genuinely *dynamic, context-aware
-assistant* — the core of the challenge brief:
-
-- 💬 **Conversational AI coach** (`/api/chat`) — ask free-form questions ("What
-  should I focus on first?"). The model is grounded in *your* computed footprint
-  via a system instruction and constrained to the topic, so answers are specific
-  to you, never generic.
-- 📸 **Bill scan with Gemini Vision** (`/api/scan-bill`) — upload a photo of your
-  electricity bill and the model reads the monthly kWh and auto-fills the
-  calculator (with a confidence level). Falls back to manual entry on low
-  confidence.
-- 🌍 **State-wise grid intelligence** (`lib/states.ts`) — electricity emissions
-  use your *state's* actual grid factor (coal-heavy vs hydro/renewable), so the
-  same usage in Chhattisgarh and Himachal Pradesh yields very different — and
-  more accurate — numbers.
-- 📈 **History, goals & streaks** (`lib/history.ts`) — log your footprint each
-  month to build a trend, keep a check-in streak, and track progress toward a
-  personal monthly target.
-- 📤 **Shareable result card** — download a branded PNG (with a donut chart) of
-  your footprint or share it via the Web Share API.
-- 🎚️ **What-if simulator** (`/simulate`) — interactive sliders for diet, vehicle,
-  solar and travel that re-project your footprint live, so you can plan the
-  combination of changes that works for you.
-- 🗓️ **AI 30-day plan** (`/plan`, `/api/plan`) — Gemini turns your numbers into a
-  week-by-week, checkable reduction roadmap; progress persists locally.
-- 🏅 **Achievements** — badges for streaks, goals, committed actions and
-  low-carbon choices, to keep momentum.
-- 🍽️ **Meal footprint scan** (`/api/scan-meal`) — photograph a plate or grocery
-  receipt and Gemini Vision estimates its itemized food carbon.
-
-The app also ships a dynamic Open Graph image (nice link previews on
-LinkedIn/X), a favicon, and `error` / `loading` / `not-found` route boundaries
-for graceful failure states. It is an installable **PWA** (web manifest +
-service worker, works offline), with animated gauges/counters and toast
-notifications for a polished feel.
-
-### Architecture
+```mermaid
+flowchart LR
+  U([User]) --> CALC[Calculator<br/>quiz + bill scan]
+  CALC -->|profile| ENG[Emission engine<br/>lib/emissions.ts]
+  ENG --> DASH[Dashboard<br/>gauge · donut · insights]
+  ENG --> SIM[Simulator]
+  ENG --> PLAN[30-day plan]
+  DASH & PLAN & CHAT[Chat coach] --> API{API routes}
+  SCAN[Bill / meal photo] --> API
+  API --> GEM[(Gemini + Vision)]
+  API -. on failure .-> RULES[Deterministic<br/>rule engine]
+  ENG --> LS[(localStorage<br/>private, no DB)]
+```
 
 ```
 app/
-  page.tsx               Landing
-  calculator/page.tsx    4-step quiz + bill scan + state picker (client)
-  dashboard/page.tsx     Results + coach + chat + tracker + progress (client)
-  api/insights/route.ts  Personalized insights → Gemini (key server-side)
-  api/chat/route.ts      Grounded multi-turn coach → Gemini
-  api/scan-bill/route.ts Electricity-bill OCR → Gemini Vision
+  page.tsx                 Landing (feature showcase)
+  calculator/page.tsx      4-step quiz + bill scan + live estimate
+  simulate/page.tsx        What-if scenario simulator
+  plan/page.tsx            AI 30-day plan (checkable)
+  dashboard/page.tsx       Gauge · donut · insights · actions · streaks · badges · meal scan
+  api/insights|chat|plan|scan-bill|scan-meal/route.ts   Server routes (Gemini, key server-side)
+  opengraph-image.jpg · icon.png · apple-icon.png · manifest.ts   Branding / PWA
 lib/
-  emissions.ts           Pure calculation engine + factors   ← unit tested
-  actions.ts             Context-aware reduction actions      ← unit tested
-  history.ts             Streaks / goals / trend logic        ← unit tested
-  states.ts              State-wise grid emission factors     ← unit tested
-  insights.ts            Deterministic rule-based fallback coach
-  gemini.ts              Shared Gemini wrapper (model fallback list)
-  ratelimit.ts           In-memory per-IP rate limiter
-  schema.ts              Zod validation (shared client + server)
-  storage.ts             SSR-safe localStorage helpers
-components/              Accessible UI (forms, chart, coach, chat, trackers)
-__tests__/               Vitest unit tests (33 tests)
+  emissions.ts   Pure engine + factors          ← tested
+  actions.ts     Context-aware reduction actions ← tested
+  states.ts      State-wise grid factors         ← tested
+  history.ts     Streaks / goals / trend         ← tested
+  achievements.ts · plan.ts   Badges & plan logic ← tested
+  insights.ts    Rule-based fallback coach
+  gemini.ts      Shared Gemini wrapper (model fallback)
+  ratelimit.ts · schema.ts · storage.ts
+components/       Accessible UI (gauge, donut, chat, charts, trackers, toasts, nav)
+__tests__/        58 Vitest tests (unit + API + component)
+.github/workflows/ci.yml   Lint · test · build on every push
 ```
 
-## 4. Assumptions
-
-- Emission factors are India-leaning, rounded estimates for **awareness**, not
-  regulatory accounting.
-- Household electricity and cooking gas are split evenly across household members
-  to approximate a personal share.
-- Food and shopping footprints use representative averages per diet/shopping
-  habit rather than itemized logging, to keep the quiz under a minute.
-- Flight emissions use round per-flight figures inclusive of radiative forcing.
-
-## 5. Evaluation criteria mapping
+## 4. How each evaluation criterion is met
 
 | Criterion | How it's addressed |
 |---|---|
-| **Problem alignment** | Full understand → track → reduce loop with personalized insights |
-| **Code quality** | TypeScript, pure functions, clear `lib`/`components`/`api` separation, documented sources |
-| **Security** | API key server-only, Zod validation of all input, rate limiting, security headers, no secrets in repo |
-| **Efficiency** | No heavy chart libraries, client-side persistence (no DB), graceful AI fallback |
-| **Testing** | 48 Vitest tests: unit (engine, actions, states, streaks/goals) + API-route tests (mocked Gemini) + component tests |
-| **Accessibility** | Semantic HTML, ARIA, keyboard navigation, skip link, focus styles, screen-reader data table, WCAG-AA contrast, reduced-motion support |
+| **Problem alignment** (High) | Full understand → track → reduce loop: calculator, dashboard, AI insights/chat, simulator, 30-day plan, streaks. Personalization is computed per-user. |
+| **Code quality** (High) | Strict TypeScript, pure & documented functions, clear `lib`/`components`/`api` separation, a shared Gemini wrapper, no dead code. |
+| **Security** | API keys server-only; **Zod** validation on every route; per-IP rate limiting; security headers; image type/size limits; no secrets in repo (`.env.example`). |
+| **Efficiency** | No chart library (custom SVG), client-side persistence (no DB), `next/font` + `next/image`, AI response kept small & cached-friendly, graceful fallbacks. |
+| **Testing** | **58 tests**: engine, actions, states, streaks/goals, achievements, plan + **API-route tests** (Gemini mocked) + **component tests**. Run in CI. |
+| **Accessibility** | Semantic HTML, ARIA, keyboard nav, skip link, focus management (chat returns focus), screen-reader data tables for charts, AA contrast, reduced-motion, safe-area-aware mobile tab bar. |
 
-## 6. Getting started
+## 5. Tech stack
+
+Next.js 14 (App Router) · TypeScript (strict) · Tailwind CSS · Zod · Google **Gemini**
+(text + Vision) · Vitest + Testing Library · deployed on Vercel.
+
+## 6. Testing
+
+```bash
+npm test          # 58 tests (unit + API + component)
+```
+
+- **Engine/logic**: emission maths, per-user action savings, state factors, streaks,
+  goal progress, achievements, plan generation.
+- **API routes**: success + validation (422) + bad-body (400) + AI-unavailable
+  fallback paths, with Gemini mocked (no network in tests).
+- **Components**: chart accessibility table, form interactions, tracker behaviour.
+
+CI (`.github/workflows/ci.yml`) runs **lint + tests + build** on every push.
+
+## 7. Security & privacy
+
+- Gemini API key lives only in a server env var; it never reaches the browser.
+- All request bodies validated with Zod; numeric ranges bounded.
+- In-memory per-IP rate limiting on every AI route.
+- Security headers (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`,
+  `Permissions-Policy`).
+- **No account, no database** — your data stays in your browser's `localStorage`.
+
+## 8. Accessibility
+
+Keyboard-navigable throughout, visible focus rings, a skip link, ARIA labelling,
+screen-reader data tables behind every chart, `aria-live` for dynamic updates, focus
+return when the chat closes, WCAG-AA contrast, `prefers-reduced-motion` support, and an
+app-style bottom tab bar with safe-area insets on mobile.
+
+## 9. Getting started
 
 ```bash
 npm install
-
-# add your free Gemini key (https://aistudio.google.com/apikey)
-cp .env.example .env.local
-# edit .env.local → GEMINI_API_KEY=...
-
-npm run dev      # http://localhost:3000
-npm test         # run unit tests
-npm run build    # production build
+cp .env.example .env.local      # add your free Gemini key from aistudio.google.com/apikey
+npm run dev                     # http://localhost:3000
+npm test                        # run the test suite
+npm run build                   # production build
 ```
 
-> The app works **without** a Gemini key — it falls back to the rule-based
-> coach. The key only upgrades the coaching copy to AI-generated.
+> The app works **without** a key (rule-based fallback); the key upgrades insights,
+> chat and image scanning to live AI.
 
-## 7. Deployment
+## 10. Deployment (Vercel)
 
-Deploys to Vercel out of the box:
-
-1. Push this repo to GitHub (public, single branch).
-2. Import it in Vercel.
-3. Add the environment variable `GEMINI_API_KEY` in the Vercel dashboard.
+1. Push to a public GitHub repo (single `main` branch).
+2. Import in Vercel — framework auto-detected (Next.js).
+3. Add env vars: `GEMINI_API_KEY`, optionally `GEMINI_MODEL`, and
+   `NEXT_PUBLIC_SITE_URL` (your deployed URL, for correct social-share image links).
 4. Deploy.
 
-## Tech stack
+## 11. Assumptions
 
-Next.js 14 (App Router) · TypeScript · Tailwind CSS · Zod · Google Gemini ·
-Vitest.
+- Emission factors are India-leaning, rounded estimates for **awareness**, not
+  certified accounting.
+- Household electricity & cooking gas are split evenly across household members.
+- Food/shopping use representative averages per diet/habit to keep the quiz under a
+  minute.
+- Flight figures use round per-flight values inclusive of radiative forcing.
 
 ---
 
-*Estimates are for awareness only and should not be treated as certified carbon
-accounting.*
+*Estimates are for awareness only and should not be treated as certified carbon accounting.*

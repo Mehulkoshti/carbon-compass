@@ -50,7 +50,7 @@ export function ProgressTracker({
             toast('This month logged', 'success');
           }}
           disabled={savedThisMonth}
-          className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700 disabled:opacity-40"
+          className="rounded-lg bg-brand-700 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-800 disabled:opacity-40"
         >
           {savedThisMonth ? 'Saved this month ✓' : 'Log this month'}
         </button>
@@ -129,7 +129,7 @@ export function ProgressTracker({
               aria-valuemax={100}
             >
               <div
-                className={`h-full rounded-full ${progress.met ? 'bg-brand-500' : 'bg-brand-600'}`}
+                className={`h-full rounded-full ${progress.met ? 'bg-brand-500' : 'bg-brand-700'}`}
                 style={{ width: `${progress.pct}%` }}
               />
             </div>

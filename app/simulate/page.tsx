@@ -60,7 +60,7 @@ export default function SimulatePage() {
         </p>
         <Link
           href="/calculator"
-          className="mt-6 inline-block rounded-lg bg-brand-600 px-6 py-3 font-semibold text-white hover:bg-brand-700"
+          className="mt-6 inline-block rounded-lg bg-brand-700 px-6 py-3 font-semibold text-white hover:bg-brand-800"
         >
           Start the calculator
         </Link>

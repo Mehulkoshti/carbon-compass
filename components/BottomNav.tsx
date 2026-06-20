@@ -30,7 +30,7 @@ export function BottomNav() {
                 href={t.href}
                 aria-current={active ? 'page' : undefined}
                 className={`flex flex-col items-center gap-0.5 py-2 text-[10px] font-medium leading-tight transition ${
-                  active ? 'text-brand-700' : 'text-slate-400 hover:text-brand-600'
+                  active ? 'text-brand-700' : 'text-slate-500 hover:text-brand-600'
                 }`}
               >
                 <span aria-hidden="true" className={`text-lg ${active ? '' : 'grayscale'}`}>

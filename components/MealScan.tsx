@@ -86,7 +86,7 @@ export function MealScan() {
         accept="image/png,image/jpeg,image/webp"
         disabled={loading}
         onChange={(e) => handleFile(e.target.files?.[0])}
-        className="mt-4 block w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-brand-600 file:px-4 file:py-2 file:text-white hover:file:bg-brand-700"
+        className="mt-4 block w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-brand-700 file:px-4 file:py-2 file:text-white hover:file:bg-brand-700"
       />
 
       {loading ? (

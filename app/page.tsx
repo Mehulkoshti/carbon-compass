@@ -144,7 +144,7 @@ const SAMPLE = {
   total: 248,
   pct: 149,
   bars: [
-    ['Transport', 110, 'bg-brand-600'],
+    ['Transport', 110, 'bg-brand-700'],
     ['Home', 48, 'bg-brand-500'],
     ['Food', 60, 'bg-brand-400'],
     ['Lifestyle', 30, 'bg-brand-200'],
@@ -182,7 +182,7 @@ export default function Home() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/calculator"
-              className="rounded-xl bg-brand-600 px-6 py-3 font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-brand-700 hover:shadow-lift"
+              className="rounded-xl bg-brand-700 px-6 py-3 font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-brand-800 hover:shadow-lift"
             >
               Calculate my footprint
             </Link>
@@ -244,7 +244,7 @@ export default function Home() {
                 <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-2xl">
                   {s.icon}
                 </span>
-                <span className="font-display text-sm font-bold text-brand-600">0{i + 1}</span>
+                <span className="font-display text-sm font-bold text-brand-700">0{i + 1}</span>
               </div>
               <h3 className="mt-4 font-display text-lg font-bold text-slate-900">{s.title}</h3>
               <p className="mt-1 text-slate-600">{s.body}</p>
@@ -268,7 +268,7 @@ export default function Home() {
         {GROUPS.map((group, gi) => (
           <div key={group.phase}>
             <div className="flex items-center gap-3">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-600 font-display text-sm font-bold text-white">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-700 font-display text-sm font-bold text-white">
                 {gi + 1}
               </span>
               <h3 className="font-display text-2xl font-bold text-slate-900">{group.phase}</h3>
@@ -292,7 +292,7 @@ export default function Home() {
                   <p className="mt-3 rounded-lg bg-brand-50 p-2 text-xs text-brand-700">
                     <strong>How:</strong> {f.how}
                   </p>
-                  <span className="mt-2 inline-flex w-fit items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500">
+                  <span className="mt-2 inline-flex w-fit items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
                     📍 {f.where}
                   </span>
                 </li>
@@ -320,7 +320,7 @@ export default function Home() {
         <div className="mt-8 text-center">
           <Link
             href="/calculator"
-            className="rounded-xl bg-brand-600 px-6 py-3 font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-brand-700 hover:shadow-lift"
+            className="rounded-xl bg-brand-700 px-6 py-3 font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-brand-800 hover:shadow-lift"
           >
             Start now — it&apos;s free
           </Link>

@@ -58,7 +58,7 @@ export default function PlanPage() {
         </p>
         <Link
           href="/calculator"
-          className="mt-6 inline-block rounded-lg bg-brand-600 px-6 py-3 font-semibold text-white hover:bg-brand-700"
+          className="mt-6 inline-block rounded-lg bg-brand-700 px-6 py-3 font-semibold text-white hover:bg-brand-800"
         >
           Start the calculator
         </Link>
@@ -112,7 +112,7 @@ export default function PlanPage() {
             aria-valuemin={0}
             aria-valuemax={100}
           >
-            <div className="h-full rounded-full bg-brand-600" style={{ width: `${pct}%` }} />
+            <div className="h-full rounded-full bg-brand-700" style={{ width: `${pct}%` }} />
           </div>
         </div>
       ) : null}

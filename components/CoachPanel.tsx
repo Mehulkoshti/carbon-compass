@@ -3,7 +3,7 @@
 import { CoachResponse } from '@/lib/insights';
 
 const IMPACT_STYLES: Record<string, string> = {
-  high: 'bg-brand-600 text-white',
+  high: 'bg-brand-700 text-white',
   medium: 'bg-brand-100 text-brand-700',
   low: 'bg-slate-100 text-slate-600',
 };

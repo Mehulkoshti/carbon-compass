@@ -22,6 +22,8 @@ export function FloatingChat() {
 
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const launcherRef = useRef<HTMLButtonElement>(null);
+  const prevOpen = useRef(false);
 
   // Load the saved profile whenever the panel opens (it may have changed).
   useEffect(() => {
@@ -29,6 +31,9 @@ export function FloatingChat() {
       setProfile(storage.loadProfile());
       requestAnimationFrame(() => inputRef.current?.focus());
     }
+    // Return focus to the launcher when the panel closes (keyboard users).
+    if (prevOpen.current && !open) launcherRef.current?.focus();
+    prevOpen.current = open;
   }, [open]);
 
   // Close on Escape.
@@ -130,7 +135,7 @@ export function FloatingChat() {
                 <Link
                   href="/calculator"
                   onClick={() => setOpen(false)}
-                  className="mt-3 block rounded-lg bg-brand-600 px-4 py-2 text-center font-semibold text-white hover:bg-brand-700"
+                  className="mt-3 block rounded-lg bg-brand-700 px-4 py-2 text-center font-semibold text-white hover:bg-brand-800"
                 >
                   Calculate my footprint
                 </Link>
@@ -151,7 +156,7 @@ export function FloatingChat() {
                       <p
                         className={`inline-block max-w-[85%] whitespace-pre-wrap rounded-2xl px-4 py-2 text-sm shadow-sm ${
                           m.role === 'user'
-                            ? 'rounded-br-sm bg-brand-600 text-white'
+                            ? 'rounded-br-sm bg-brand-700 text-white'
                             : 'rounded-tl-sm bg-white text-slate-800'
                         }`}
                       >
@@ -214,7 +219,7 @@ export function FloatingChat() {
                 type="submit"
                 disabled={loading || !input.trim()}
                 aria-label="Send message"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-600 text-white hover:bg-brand-700 disabled:opacity-40"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-700 text-white hover:bg-brand-800 disabled:opacity-40"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path
@@ -233,9 +238,11 @@ export function FloatingChat() {
 
       {/* Launcher button */}
       <button
+        ref={launcherRef}
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-label={open ? 'Close carbon coach chat' : 'Open carbon coach chat'}
+        aria-haspopup="dialog"
         aria-expanded={open}
         className="fixed bottom-20 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand-600 to-brand-700 text-white shadow-lg transition hover:scale-105 hover:shadow-xl sm:bottom-5 sm:right-6"
       >

@@ -53,7 +53,7 @@ export default function CalculatorPage() {
         {STEPS.map((label, i) => (
           <li key={label} className="flex-1">
             <div
-              className={`h-2 rounded-full ${i <= step ? 'bg-brand-600' : 'bg-brand-100'}`}
+              className={`h-2 rounded-full ${i <= step ? 'bg-brand-700' : 'bg-brand-100'}`}
               aria-current={i === step ? 'step' : undefined}
             />
             <span className="mt-1 block text-xs text-slate-500">{label}</span>
@@ -215,7 +215,7 @@ export default function CalculatorPage() {
             <button
               type="button"
               onClick={finish}
-              className="rounded-lg bg-brand-600 px-6 py-2 font-semibold text-white hover:bg-brand-700"
+              className="rounded-lg bg-brand-700 px-6 py-2 font-semibold text-white hover:bg-brand-800"
             >
               See my results
             </button>
@@ -223,7 +223,7 @@ export default function CalculatorPage() {
             <button
               type="button"
               onClick={() => setStep((s) => Math.min(STEPS.length - 1, s + 1))}
-              className="rounded-lg bg-brand-600 px-6 py-2 font-semibold text-white hover:bg-brand-700"
+              className="rounded-lg bg-brand-700 px-6 py-2 font-semibold text-white hover:bg-brand-800"
             >
               Next →
             </button>

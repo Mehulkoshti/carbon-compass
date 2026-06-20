@@ -151,7 +151,7 @@ export function ShareResult({ result }: { result: FootprintResult }) {
       <button
         type="button"
         onClick={share}
-        className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700"
+        className="rounded-lg bg-brand-700 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-800"
       >
         Share my footprint
       </button>
