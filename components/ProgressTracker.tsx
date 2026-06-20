@@ -8,6 +8,7 @@ import {
   goalProgress,
   HistoryEntry,
 } from '@/lib/history';
+import { useToast } from '@/components/Toast';
 
 export function ProgressTracker({
   currentTotal,
@@ -25,6 +26,7 @@ export function ProgressTracker({
   onSetGoal: (g: number) => void;
 }) {
   const [goalInput, setGoalInput] = useState(goal ? String(goal) : '');
+  const toast = useToast();
 
   const streak = computeStreak(history);
   const change = changeFromPrevious(history);
@@ -43,7 +45,10 @@ export function ProgressTracker({
         </h2>
         <button
           type="button"
-          onClick={onSaveMonth}
+          onClick={() => {
+            onSaveMonth();
+            toast('This month logged', 'success');
+          }}
           disabled={savedThisMonth}
           className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700 disabled:opacity-40"
         >
@@ -77,7 +82,10 @@ export function ProgressTracker({
           onSubmit={(e) => {
             e.preventDefault();
             const g = Number(goalInput);
-            if (Number.isFinite(g) && g > 0) onSetGoal(g);
+            if (Number.isFinite(g) && g > 0) {
+              onSetGoal(g);
+              toast('Goal saved', 'success');
+            }
           }}
         >
           <div>

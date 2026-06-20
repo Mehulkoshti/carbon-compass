@@ -1,8 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-
 import { Category, CATEGORY_LABELS, FootprintResult } from '@/lib/emissions';
+import { useToast } from '@/components/Toast';
 
 // Brighter palette so every segment stays legible on the dark card background.
 const COLORS: Record<Category, string> = {
@@ -113,19 +112,22 @@ function drawCard(result: FootprintResult): HTMLCanvasElement {
 }
 
 export function ShareResult({ result }: { result: FootprintResult }) {
-  const [status, setStatus] = useState('');
+  const toast = useToast();
 
   function download() {
     const canvas = drawCard(result);
     canvas.toBlob((blob) => {
-      if (!blob) return;
+      if (!blob) {
+        toast('Could not generate the card.', 'error');
+        return;
+      }
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = 'my-carbon-footprint.png';
       a.click();
       URL.revokeObjectURL(url);
-      setStatus('Card downloaded ✓');
+      toast('Card downloaded', 'success');
     }, 'image/png');
   }
 
@@ -135,13 +137,12 @@ export function ShareResult({ result }: { result: FootprintResult }) {
     try {
       if (navigator.share) {
         await navigator.share({ title: 'CarbonCompass', text, url });
-        setStatus('Shared ✓');
       } else {
         await navigator.clipboard.writeText(`${text} ${url}`);
-        setStatus('Copied to clipboard ✓');
+        toast('Copied to clipboard', 'success');
       }
     } catch {
-      setStatus('');
+      /* user cancelled the share sheet — no toast needed */
     }
   }
 
@@ -161,11 +162,6 @@ export function ShareResult({ result }: { result: FootprintResult }) {
       >
         Download card
       </button>
-      {status ? (
-        <span role="status" className="text-sm text-brand-700">
-          {status}
-        </span>
-      ) : null}
     </div>
   );
 }

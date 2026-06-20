@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Inter, Sora } from 'next/font/google';
 import { FloatingChat } from '@/components/FloatingChat';
+import { ToastProvider } from '@/components/Toast';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable} ${sora.variable}`}>
       <body className="flex min-h-screen flex-col font-sans">
+        <ToastProvider>
         <a href="#main" className="skip-link">
           Skip to main content
         </a>
@@ -94,6 +96,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* Floating AI coach, available on every page */}
         <FloatingChat />
+        </ToastProvider>
       </body>
     </html>
   );
