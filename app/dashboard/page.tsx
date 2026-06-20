@@ -7,6 +7,7 @@ import { ActionTracker } from '@/components/ActionTracker';
 import { BarChart } from '@/components/BarChart';
 import { CoachPanel } from '@/components/CoachPanel';
 import { ProgressTracker } from '@/components/ProgressTracker';
+import { ShareResult } from '@/components/ShareResult';
 import { rankActions, totalSaving } from '@/lib/actions';
 import { calculateFootprint, FootprintResult, UserProfile } from '@/lib/emissions';
 import { addEntry, HistoryEntry, monthKey } from '@/lib/history';
@@ -129,12 +130,15 @@ export default function DashboardPage() {
           <h1 className="text-3xl font-bold text-slate-900">Your dashboard</h1>
           <p className="mt-1 text-slate-600">Monthly carbon footprint estimate.</p>
         </div>
-        <Link
-          href="/calculator"
-          className="rounded-lg border border-brand-200 bg-white px-4 py-2 text-sm font-medium text-brand-700 hover:bg-brand-50"
-        >
-          Recalculate
-        </Link>
+        <div className="flex flex-wrap items-center gap-2">
+          <ShareResult result={result} />
+          <Link
+            href="/calculator"
+            className="rounded-lg border border-brand-200 bg-white px-4 py-2 text-sm font-medium text-brand-700 hover:bg-brand-50"
+          >
+            Recalculate
+          </Link>
+        </div>
       </div>
 
       {/* Headline numbers */}

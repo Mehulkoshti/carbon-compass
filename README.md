@@ -75,6 +75,12 @@ assistant* — the core of the challenge brief:
 - 📈 **History, goals & streaks** (`lib/history.ts`) — log your footprint each
   month to build a trend, keep a check-in streak, and track progress toward a
   personal monthly target.
+- 📤 **Shareable result card** — download a branded PNG of your footprint or
+  share it via the Web Share API, to nudge friends to measure theirs too.
+
+The app also ships a dynamic Open Graph image (nice link previews on
+LinkedIn/X), a favicon, and `error` / `loading` / `not-found` route boundaries
+for graceful failure states.
 
 ### Architecture
 
@@ -118,7 +124,7 @@ __tests__/               Vitest unit tests (33 tests)
 | **Code quality** | TypeScript, pure functions, clear `lib`/`components`/`api` separation, documented sources |
 | **Security** | API key server-only, Zod validation of all input, rate limiting, security headers, no secrets in repo |
 | **Efficiency** | No heavy chart libraries, client-side persistence (no DB), graceful AI fallback |
-| **Testing** | 33 Vitest unit tests covering the emission engine, action savings, state factors, and streak/goal logic |
+| **Testing** | 48 Vitest tests: unit (engine, actions, states, streaks/goals) + API-route tests (mocked Gemini) + component tests |
 | **Accessibility** | Semantic HTML, ARIA, keyboard navigation, skip link, focus styles, screen-reader data table, WCAG-AA contrast, reduced-motion support |
 
 ## 6. Getting started

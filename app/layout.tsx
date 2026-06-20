@@ -3,11 +3,32 @@ import Link from 'next/link';
 import { FloatingChat } from '@/components/FloatingChat';
 import './globals.css';
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
+
+const title = 'CarbonCompass — Understand, track & reduce your carbon footprint';
+const description =
+  'A personal carbon footprint awareness platform. Estimate your monthly emissions, get AI-personalized insights, scan your electricity bill, and track simple actions to reduce them.';
+
 export const metadata: Metadata = {
-  title: 'CarbonCompass — Understand, track & reduce your carbon footprint',
-  description:
-    'A personal carbon footprint awareness platform. Estimate your monthly emissions, get AI-personalized insights, and track simple actions to reduce them.',
-  keywords: ['carbon footprint', 'sustainability', 'climate', 'emissions calculator'],
+  metadataBase: new URL(siteUrl),
+  title,
+  description,
+  keywords: ['carbon footprint', 'sustainability', 'climate', 'emissions calculator', 'AI'],
+  applicationName: 'CarbonCompass',
+  openGraph: {
+    title,
+    description,
+    siteName: 'CarbonCompass',
+    type: 'website',
+    url: '/',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title,
+    description,
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
