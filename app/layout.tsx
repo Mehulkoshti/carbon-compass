@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { FloatingChat } from '@/components/FloatingChat';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -51,6 +52,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </p>
           </div>
         </footer>
+
+        {/* Floating AI coach, available on every page */}
+        <FloatingChat />
       </body>
     </html>
   );

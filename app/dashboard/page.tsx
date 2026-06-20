@@ -5,7 +5,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ActionTracker } from '@/components/ActionTracker';
 import { BarChart } from '@/components/BarChart';
-import { ChatCoach } from '@/components/ChatCoach';
 import { CoachPanel } from '@/components/CoachPanel';
 import { ProgressTracker } from '@/components/ProgressTracker';
 import { rankActions, totalSaving } from '@/lib/actions';
@@ -175,8 +174,6 @@ export default function DashboardPage() {
 
         <CoachPanel coach={coach} loading={loadingCoach} />
       </div>
-
-      <ChatCoach profile={profile} />
 
       <ActionTracker
         actions={ranked}
