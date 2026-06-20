@@ -7,11 +7,14 @@
  */
 
 import { FootprintResult, UserProfile } from './emissions';
+import { HistoryEntry } from './history';
 
 const KEYS = {
   profile: 'cc.profile',
   result: 'cc.result',
   actions: 'cc.actions',
+  history: 'cc.history',
+  goal: 'cc.goal',
 } as const;
 
 function read<T>(key: string): T | null {
@@ -42,6 +45,12 @@ export const storage = {
 
   saveActions: (ids: string[]) => write(KEYS.actions, ids),
   loadActions: () => read<string[]>(KEYS.actions) ?? [],
+
+  saveHistory: (h: HistoryEntry[]) => write(KEYS.history, h),
+  loadHistory: () => read<HistoryEntry[]>(KEYS.history) ?? [],
+
+  saveGoal: (g: number) => write(KEYS.goal, g),
+  loadGoal: () => read<number>(KEYS.goal),
 
   clear: () => {
     if (typeof window === 'undefined') return;

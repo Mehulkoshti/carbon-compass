@@ -6,6 +6,8 @@
 
 import { z } from 'zod';
 
+import { REGION_CODES } from './states';
+
 const km = z.number().min(0).max(100000);
 const count = z.number().min(0).max(1000);
 
@@ -22,6 +24,7 @@ export const userProfileSchema = z.object({
     householdSize: z.number().int().min(1).max(50),
     lpgCylindersPerMonth: z.number().min(0).max(100),
     renewableShare: z.number().min(0).max(1),
+    stateCode: z.enum(REGION_CODES as [string, ...string[]]).optional(),
   }),
   food: z.object({
     diet: z.enum(['vegan', 'vegetarian', 'eggetarian', 'moderate_meat', 'heavy_meat']),
@@ -35,4 +38,21 @@ export const insightsRequestSchema = z.object({
   profile: userProfileSchema,
 });
 
+export const chatMessageSchema = z.object({
+  role: z.enum(['user', 'model']),
+  content: z.string().min(1).max(2000),
+});
+
+export const chatRequestSchema = z.object({
+  profile: userProfileSchema,
+  messages: z.array(chatMessageSchema).min(1).max(20),
+});
+
+export const scanBillRequestSchema = z.object({
+  // data URL or raw base64 of the uploaded image; bounded to ~6MB base64.
+  imageBase64: z.string().min(1).max(8_000_000),
+  mimeType: z.enum(['image/png', 'image/jpeg', 'image/webp']),
+});
+
 export type ValidatedProfile = z.infer<typeof userProfileSchema>;
+export type ChatMessage = z.infer<typeof chatMessageSchema>;

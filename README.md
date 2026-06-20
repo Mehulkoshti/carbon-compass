@@ -55,22 +55,49 @@ The core design decision is **separation of maths from language**:
 4. **Persistence** — everything is stored in the browser (`localStorage`). No
    account, no database, no personal data leaves the device.
 
+### Smart-assistant features
+
+These turn CarbonCompass from a calculator into a genuinely *dynamic, context-aware
+assistant* — the core of the challenge brief:
+
+- 💬 **Conversational AI coach** (`/api/chat`) — ask free-form questions ("What
+  should I focus on first?"). The model is grounded in *your* computed footprint
+  via a system instruction and constrained to the topic, so answers are specific
+  to you, never generic.
+- 📸 **Bill scan with Gemini Vision** (`/api/scan-bill`) — upload a photo of your
+  electricity bill and the model reads the monthly kWh and auto-fills the
+  calculator (with a confidence level). Falls back to manual entry on low
+  confidence.
+- 🌍 **State-wise grid intelligence** (`lib/states.ts`) — electricity emissions
+  use your *state's* actual grid factor (coal-heavy vs hydro/renewable), so the
+  same usage in Chhattisgarh and Himachal Pradesh yields very different — and
+  more accurate — numbers.
+- 📈 **History, goals & streaks** (`lib/history.ts`) — log your footprint each
+  month to build a trend, keep a check-in streak, and track progress toward a
+  personal monthly target.
+
 ### Architecture
 
 ```
 app/
-  page.tsx              Landing
-  calculator/page.tsx   4-step quiz (client)
-  dashboard/page.tsx    Results + coach + tracker (client)
-  api/insights/route.ts Server route → Gemini (key stays server-side)
+  page.tsx               Landing
+  calculator/page.tsx    4-step quiz + bill scan + state picker (client)
+  dashboard/page.tsx     Results + coach + chat + tracker + progress (client)
+  api/insights/route.ts  Personalized insights → Gemini (key server-side)
+  api/chat/route.ts      Grounded multi-turn coach → Gemini
+  api/scan-bill/route.ts Electricity-bill OCR → Gemini Vision
 lib/
-  emissions.ts          Pure calculation engine + factors  ← unit tested
-  actions.ts            Context-aware reduction actions     ← unit tested
-  insights.ts           Deterministic rule-based fallback coach
-  schema.ts             Zod validation (shared client + server)
-  storage.ts            SSR-safe localStorage helpers
-components/             Accessible UI (forms, chart, coach, tracker)
-__tests__/              Vitest unit tests
+  emissions.ts           Pure calculation engine + factors   ← unit tested
+  actions.ts             Context-aware reduction actions      ← unit tested
+  history.ts             Streaks / goals / trend logic        ← unit tested
+  states.ts              State-wise grid emission factors     ← unit tested
+  insights.ts            Deterministic rule-based fallback coach
+  gemini.ts              Shared Gemini wrapper (model fallback list)
+  ratelimit.ts           In-memory per-IP rate limiter
+  schema.ts              Zod validation (shared client + server)
+  storage.ts             SSR-safe localStorage helpers
+components/              Accessible UI (forms, chart, coach, chat, trackers)
+__tests__/               Vitest unit tests (33 tests)
 ```
 
 ## 4. Assumptions
@@ -91,7 +118,7 @@ __tests__/              Vitest unit tests
 | **Code quality** | TypeScript, pure functions, clear `lib`/`components`/`api` separation, documented sources |
 | **Security** | API key server-only, Zod validation of all input, rate limiting, security headers, no secrets in repo |
 | **Efficiency** | No heavy chart libraries, client-side persistence (no DB), graceful AI fallback |
-| **Testing** | Vitest unit tests covering the emission engine and action-savings logic |
+| **Testing** | 33 Vitest unit tests covering the emission engine, action savings, state factors, and streak/goal logic |
 | **Accessibility** | Semantic HTML, ARIA, keyboard navigation, skip link, focus styles, screen-reader data table, WCAG-AA contrast, reduced-motion support |
 
 ## 6. Getting started

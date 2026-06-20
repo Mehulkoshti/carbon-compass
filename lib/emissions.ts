@@ -10,6 +10,8 @@
  * reused on both the server and the client.
  */
 
+import { gridFactorFor } from './states';
+
 export type CarFuel = 'none' | 'petrol' | 'diesel' | 'ev';
 export type DietType =
   | 'vegan'
@@ -35,6 +37,8 @@ export interface UserProfile {
     lpgCylindersPerMonth: number;
     /** Share of electricity from rooftop solar / green tariff, 0..1. */
     renewableShare: number;
+    /** Grid region code (see lib/states.ts). Defaults to national average. */
+    stateCode?: string;
   };
   food: { diet: DietType };
   lifestyle: { shopping: ShoppingLevel };
@@ -95,12 +99,15 @@ export function transportMonthly(p: UserProfile): number {
   return carMonthly(p) + transitMonthly(p) + flightsMonthly(p);
 }
 
-/** Personal share of household electricity emissions (after renewables). */
+/**
+ * Personal share of household electricity emissions (after renewables), using
+ * the state-specific grid factor when available.
+ */
 export function electricityMonthlyPerPerson(p: UserProfile): number {
   const household = Math.max(1, Math.floor(nonNeg(p.home.householdSize)) || 1);
   const renewable = Math.min(1, Math.max(0, p.home.renewableShare));
-  const gross =
-    nonNeg(p.home.electricityKwhPerMonth) * FACTORS.electricityPerKwh * (1 - renewable);
+  const gridFactor = gridFactorFor(p.home.stateCode);
+  const gross = nonNeg(p.home.electricityKwhPerMonth) * gridFactor * (1 - renewable);
   return gross / household;
 }
 

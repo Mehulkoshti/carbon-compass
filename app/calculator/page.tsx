@@ -3,10 +3,12 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import { NumberField, RadioGroup } from '@/components/forms';
+import { BillScan } from '@/components/BillScan';
+import { NumberField, RadioGroup, SelectField } from '@/components/forms';
 import { DEFAULT_PROFILE } from '@/lib/defaults';
 import { calculateFootprint, UserProfile } from '@/lib/emissions';
 import { userProfileSchema } from '@/lib/schema';
+import { GRID_REGIONS } from '@/lib/states';
 import { storage } from '@/lib/storage';
 
 const STEPS = ['Transport', 'Home energy', 'Food', 'Lifestyle'] as const;
@@ -112,6 +114,16 @@ export default function CalculatorPage() {
 
         {step === 1 && (
           <>
+            <SelectField
+              label="Your state / region"
+              hint="We use your state's actual grid emission factor for a more accurate estimate."
+              value={profile.home.stateCode ?? 'IN'}
+              onChange={(stateCode) => set('home', { ...profile.home, stateCode })}
+              options={GRID_REGIONS.map((r) => ({ value: r.code, label: r.name }))}
+            />
+            <BillScan
+              onExtract={(kwh) => set('home', { ...profile.home, electricityKwhPerMonth: kwh })}
+            />
             <NumberField
               label="Household electricity"
               unit="kWh / month"

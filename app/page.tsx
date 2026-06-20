@@ -69,6 +69,28 @@ export default function Home() {
         </ol>
       </section>
 
+      <section aria-labelledby="features-heading">
+        <h2 id="features-heading" className="text-center text-2xl font-bold text-slate-900">
+          More than a calculator — a smart assistant
+        </h2>
+        <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            ['💬', 'AI chat coach', 'Ask questions; get answers grounded in your own data.'],
+            ['📸', 'Scan your bill', 'Snap your electricity bill — AI reads the kWh for you.'],
+            ['🌍', 'State-aware', "Uses your state's real grid emissions for accuracy."],
+            ['📈', 'Streaks & goals', 'Track monthly progress and hit your reduction target.'],
+          ].map(([icon, title, body]) => (
+            <li key={title} className="rounded-xl border border-brand-100 bg-white p-5 shadow-sm">
+              <span aria-hidden="true" className="text-2xl">
+                {icon}
+              </span>
+              <h3 className="mt-2 font-bold text-slate-900">{title}</h3>
+              <p className="mt-1 text-sm text-slate-600">{body}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <section className="rounded-xl bg-brand-900 p-8 text-center text-brand-50">
         <h2 className="text-2xl font-bold">Where does your number land?</h2>
         <p className="mt-2 text-brand-100">

@@ -52,6 +52,50 @@ export function NumberField({
   );
 }
 
+interface SelectFieldProps<T extends string> {
+  label: string;
+  value: T;
+  options: { value: T; label: string }[];
+  onChange: (v: T) => void;
+  hint?: string;
+}
+
+export function SelectField<T extends string>({
+  label,
+  value,
+  options,
+  onChange,
+  hint,
+}: SelectFieldProps<T>) {
+  const id = useId();
+  const hintId = hint ? `${id}-hint` : undefined;
+  return (
+    <div>
+      <label htmlFor={id} className="block text-sm font-medium text-slate-700">
+        {label}
+      </label>
+      <select
+        id={id}
+        value={value}
+        aria-describedby={hintId}
+        onChange={(e) => onChange(e.target.value as T)}
+        className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 focus:border-brand-600"
+      >
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </select>
+      {hint ? (
+        <p id={hintId} className="mt-1 text-xs text-slate-500">
+          {hint}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
 interface Option<T extends string> {
   value: T;
   label: string;

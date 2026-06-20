@@ -14,6 +14,7 @@ export const DEFAULT_PROFILE: UserProfile = {
     householdSize: 3,
     lpgCylindersPerMonth: 1,
     renewableShare: 0,
+    stateCode: 'IN',
   },
   food: { diet: 'moderate_meat' },
   lifestyle: { shopping: 'average' },

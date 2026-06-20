@@ -5,9 +5,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ActionTracker } from '@/components/ActionTracker';
 import { BarChart } from '@/components/BarChart';
+import { ChatCoach } from '@/components/ChatCoach';
 import { CoachPanel } from '@/components/CoachPanel';
+import { ProgressTracker } from '@/components/ProgressTracker';
 import { rankActions, totalSaving } from '@/lib/actions';
 import { calculateFootprint, FootprintResult, UserProfile } from '@/lib/emissions';
+import { addEntry, HistoryEntry, monthKey } from '@/lib/history';
 import { buildRuleBasedCoach, CoachResponse } from '@/lib/insights';
 import { storage } from '@/lib/storage';
 
@@ -17,6 +20,8 @@ export default function DashboardPage() {
   const [coach, setCoach] = useState<CoachResponse | null>(null);
   const [loadingCoach, setLoadingCoach] = useState(false);
   const [committed, setCommitted] = useState<string[]>([]);
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [goal, setGoal] = useState<number | null>(null);
   const [ready, setReady] = useState(false);
 
   // Load persisted state on mount.
@@ -26,6 +31,8 @@ export default function DashboardPage() {
       setProfile(p);
       setResult(calculateFootprint(p));
       setCommitted(storage.loadActions());
+      setHistory(storage.loadHistory());
+      setGoal(storage.loadGoal());
     }
     setReady(true);
   }, []);
@@ -75,6 +82,23 @@ export default function DashboardPage() {
     },
     [],
   );
+
+  const currentMonth = monthKey(new Date());
+  const savedThisMonth = history.some((h) => h.month === currentMonth);
+
+  const saveMonth = useCallback(() => {
+    if (!result) return;
+    setHistory((prev) => {
+      const next = addEntry(prev, { month: monthKey(new Date()), total: result.totalMonthly });
+      storage.saveHistory(next);
+      return next;
+    });
+  }, [result]);
+
+  const setGoalValue = useCallback((g: number) => {
+    setGoal(g);
+    storage.saveGoal(g);
+  }, []);
 
   if (!ready) {
     return <p className="text-slate-500">Loading…</p>;
@@ -152,12 +176,23 @@ export default function DashboardPage() {
         <CoachPanel coach={coach} loading={loadingCoach} />
       </div>
 
+      <ChatCoach profile={profile} />
+
       <ActionTracker
         actions={ranked}
         committed={committed}
         onToggle={toggle}
         totalSaved={saved}
         baseline={result.totalMonthly}
+      />
+
+      <ProgressTracker
+        currentTotal={result.totalMonthly}
+        history={history}
+        goal={goal}
+        savedThisMonth={savedThisMonth}
+        onSaveMonth={saveMonth}
+        onSetGoal={setGoalValue}
       />
     </div>
   );
