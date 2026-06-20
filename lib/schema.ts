@@ -48,10 +48,17 @@ export const chatRequestSchema = z.object({
   messages: z.array(chatMessageSchema).min(1).max(20),
 });
 
-export const scanBillRequestSchema = z.object({
+const imageSchema = z.object({
   // data URL or raw base64 of the uploaded image; bounded to ~6MB base64.
   imageBase64: z.string().min(1).max(8_000_000),
   mimeType: z.enum(['image/png', 'image/jpeg', 'image/webp']),
+});
+
+export const scanBillRequestSchema = imageSchema;
+export const scanMealRequestSchema = imageSchema;
+
+export const planRequestSchema = z.object({
+  profile: userProfileSchema,
 });
 
 export type ValidatedProfile = z.infer<typeof userProfileSchema>;

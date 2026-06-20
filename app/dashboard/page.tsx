@@ -3,13 +3,16 @@
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { Achievements } from '@/components/Achievements';
 import { ActionTracker } from '@/components/ActionTracker';
 import { CountUp } from '@/components/CountUp';
 import { DonutChart } from '@/components/DonutChart';
 import { CoachPanel } from '@/components/CoachPanel';
 import { Gauge } from '@/components/Gauge';
+import { MealScan } from '@/components/MealScan';
 import { ProgressTracker } from '@/components/ProgressTracker';
 import { ShareResult } from '@/components/ShareResult';
+import { computeBadges } from '@/lib/achievements';
 import { rankActions, totalSaving } from '@/lib/actions';
 import { calculateFootprint, FootprintResult, UserProfile } from '@/lib/emissions';
 import { addEntry, HistoryEntry, monthKey } from '@/lib/history';
@@ -206,6 +209,12 @@ export default function DashboardPage() {
         onSaveMonth={saveMonth}
         onSetGoal={setGoalValue}
       />
+
+      <Achievements
+        badges={computeBadges({ profile, result, history, committedActions: committed, goal })}
+      />
+
+      <MealScan />
     </div>
   );
 }

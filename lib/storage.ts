@@ -15,6 +15,7 @@ const KEYS = {
   actions: 'cc.actions',
   history: 'cc.history',
   goal: 'cc.goal',
+  planDone: 'cc.planDone',
 } as const;
 
 function read<T>(key: string): T | null {
@@ -51,6 +52,9 @@ export const storage = {
 
   saveGoal: (g: number) => write(KEYS.goal, g),
   loadGoal: () => read<number>(KEYS.goal),
+
+  savePlanDone: (ids: string[]) => write(KEYS.planDone, ids),
+  loadPlanDone: () => read<string[]>(KEYS.planDone) ?? [],
 
   clear: () => {
     if (typeof window === 'undefined') return;

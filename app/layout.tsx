@@ -74,19 +74,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </span>
               CarbonCompass
             </Link>
-            <div className="flex items-center gap-1 text-sm font-medium">
-              <Link
-                href="/calculator"
-                className="rounded-lg px-3 py-1.5 text-slate-600 transition hover:bg-brand-50 hover:text-brand-700"
-              >
-                Calculator
-              </Link>
-              <Link
-                href="/dashboard"
-                className="rounded-lg px-3 py-1.5 text-slate-600 transition hover:bg-brand-50 hover:text-brand-700"
-              >
-                Dashboard
-              </Link>
+            <div className="flex items-center gap-0.5 text-sm font-medium">
+              {[
+                ['/calculator', 'Calculator'],
+                ['/simulate', 'Simulate'],
+                ['/plan', 'Plan'],
+                ['/dashboard', 'Dashboard'],
+              ].map(([href, label]) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="rounded-lg px-2.5 py-1.5 text-slate-600 transition hover:bg-brand-50 hover:text-brand-700 sm:px-3"
+                >
+                  {label}
+                </Link>
+              ))}
             </div>
           </nav>
         </header>

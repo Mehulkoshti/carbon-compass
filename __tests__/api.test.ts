@@ -10,6 +10,8 @@ vi.mock('@/lib/gemini', () => ({
 import { POST as insightsPOST } from '@/app/api/insights/route';
 import { POST as chatPOST } from '@/app/api/chat/route';
 import { POST as scanPOST } from '@/app/api/scan-bill/route';
+import { POST as mealPOST } from '@/app/api/scan-meal/route';
+import { POST as planPOST } from '@/app/api/plan/route';
 import { chat, generate, geminiAvailable } from '@/lib/gemini';
 
 const validProfile = {
@@ -139,6 +141,58 @@ describe('POST /api/scan-bill', () => {
   it('rejects an unsupported image type with 422', async () => {
     vi.mocked(geminiAvailable).mockReturnValue(true);
     const res = await scanPOST(jsonReq({ imageBase64: 'x', mimeType: 'image/gif' }));
+    expect(res.status).toBe(422);
+  });
+});
+
+describe('POST /api/scan-meal', () => {
+  const img = { imageBase64: 'data:image/png;base64,AAAA', mimeType: 'image/png' };
+
+  it('returns itemized food estimates from a vision response', async () => {
+    vi.mocked(geminiAvailable).mockReturnValue(true);
+    vi.mocked(generate).mockResolvedValue(
+      JSON.stringify({ items: [{ name: 'Rice', kg: 0.4 }], totalKg: 0.4, note: 'ok' }),
+    );
+    const res = await mealPOST(jsonReq(img));
+    expect(res.status).toBe(200);
+    const data = await res.json();
+    expect(data.items[0].name).toBe('Rice');
+    expect(data.totalKg).toBe(0.4);
+  });
+
+  it('returns 503 when AI is not configured', async () => {
+    vi.mocked(geminiAvailable).mockReturnValue(false);
+    const res = await mealPOST(jsonReq(img));
+    expect(res.status).toBe(503);
+  });
+});
+
+describe('POST /api/plan', () => {
+  it('returns the rule-based plan when AI is unavailable', async () => {
+    vi.mocked(generate).mockResolvedValue(null);
+    const res = await planPOST(jsonReq({ profile: validProfile }));
+    expect(res.status).toBe(200);
+    const data = await res.json();
+    expect(data.plan.source).toBe('rules');
+    expect(data.plan.weeks).toHaveLength(4);
+  });
+
+  it('uses the AI plan when Gemini returns valid JSON', async () => {
+    vi.mocked(generate).mockResolvedValue(
+      JSON.stringify({
+        weeks: [
+          { week: 1, theme: 'Quick wins', tasks: [{ title: 'Carpool', detail: 'd', category: 'transport', estSaving: 30 }] },
+        ],
+      }),
+    );
+    const res = await planPOST(jsonReq({ profile: validProfile }));
+    const data = await res.json();
+    expect(data.plan.source).toBe('ai');
+    expect(data.plan.weeks[0].tasks[0].title).toBe('Carpool');
+  });
+
+  it('rejects an invalid profile with 422', async () => {
+    const res = await planPOST(jsonReq({ profile: { nope: 1 } }));
     expect(res.status).toBe(422);
   });
 });

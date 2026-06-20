@@ -75,8 +75,17 @@ assistant* — the core of the challenge brief:
 - 📈 **History, goals & streaks** (`lib/history.ts`) — log your footprint each
   month to build a trend, keep a check-in streak, and track progress toward a
   personal monthly target.
-- 📤 **Shareable result card** — download a branded PNG of your footprint or
-  share it via the Web Share API, to nudge friends to measure theirs too.
+- 📤 **Shareable result card** — download a branded PNG (with a donut chart) of
+  your footprint or share it via the Web Share API.
+- 🎚️ **What-if simulator** (`/simulate`) — interactive sliders for diet, vehicle,
+  solar and travel that re-project your footprint live, so you can plan the
+  combination of changes that works for you.
+- 🗓️ **AI 30-day plan** (`/plan`, `/api/plan`) — Gemini turns your numbers into a
+  week-by-week, checkable reduction roadmap; progress persists locally.
+- 🏅 **Achievements** — badges for streaks, goals, committed actions and
+  low-carbon choices, to keep momentum.
+- 🍽️ **Meal footprint scan** (`/api/scan-meal`) — photograph a plate or grocery
+  receipt and Gemini Vision estimates its itemized food carbon.
 
 The app also ships a dynamic Open Graph image (nice link previews on
 LinkedIn/X), a favicon, and `error` / `loading` / `not-found` route boundaries

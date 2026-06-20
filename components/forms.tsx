@@ -52,6 +52,51 @@ export function NumberField({
   );
 }
 
+interface RangeFieldProps {
+  label: string;
+  value: number;
+  onChange: (v: number) => void;
+  min: number;
+  max: number;
+  step?: number;
+  unit?: string;
+}
+
+export function RangeField({
+  label,
+  value,
+  onChange,
+  min,
+  max,
+  step = 1,
+  unit,
+}: RangeFieldProps) {
+  const id = useId();
+  return (
+    <div>
+      <div className="flex justify-between text-sm">
+        <label htmlFor={id} className="font-medium text-slate-700">
+          {label}
+        </label>
+        <span className="font-semibold text-brand-700">
+          {value}
+          {unit ? ` ${unit}` : ''}
+        </span>
+      </div>
+      <input
+        id={id}
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="mt-2 w-full accent-brand-600"
+      />
+    </div>
+  );
+}
+
 interface SelectFieldProps<T extends string> {
   label: string;
   value: T;
