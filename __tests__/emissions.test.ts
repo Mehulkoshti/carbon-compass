@@ -68,8 +68,7 @@ describe('foodMonthly', () => {
 describe('calculateFootprint', () => {
   it('sums the four categories into the monthly total', () => {
     const r = calculateFootprint(base);
-    const sum =
-      r.breakdown.transport + r.breakdown.home + r.breakdown.food + r.breakdown.lifestyle;
+    const sum = r.breakdown.transport + r.breakdown.home + r.breakdown.food + r.breakdown.lifestyle;
     expect(r.totalMonthly).toBeCloseTo(sum, 1);
   });
 
@@ -86,10 +85,7 @@ describe('calculateFootprint', () => {
 
   it('compares against the India benchmark correctly', () => {
     const r = calculateFootprint(base);
-    expect(r.comparison.vsIndiaPct).toBeCloseTo(
-      (r.totalMonthly / BENCHMARKS.indiaAvg) * 100,
-      0,
-    );
+    expect(r.comparison.vsIndiaPct).toBeCloseTo((r.totalMonthly / BENCHMARKS.indiaAvg) * 100, 0);
   });
 
   it('handles an empty / zero profile without crashing', () => {

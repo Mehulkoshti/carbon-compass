@@ -2,14 +2,13 @@
 
 import { useState } from 'react';
 
-import {
-  changeFromPrevious,
-  computeStreak,
-  goalProgress,
-  HistoryEntry,
-} from '@/lib/history';
+import { changeFromPrevious, computeStreak, goalProgress, HistoryEntry } from '@/lib/history';
 import { useToast } from '@/components/Toast';
 
+/**
+ * Monthly-tracking panel: check-in streak, months tracked, change vs last month,
+ * a reduction goal with progress bar, and a simple bar-chart trend.
+ */
 export function ProgressTracker({
   currentTotal,
   history,

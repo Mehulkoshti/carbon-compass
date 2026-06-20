@@ -24,10 +24,7 @@ export interface CoachResponse {
 }
 
 /** Build a personalized, deterministic coaching response from the numbers. */
-export function buildRuleBasedCoach(
-  profile: UserProfile,
-  result: FootprintResult,
-): CoachResponse {
+export function buildRuleBasedCoach(profile: UserProfile, result: FootprintResult): CoachResponse {
   const { totalMonthly, topCategory, comparison } = result;
   const topLabel = CATEGORY_LABELS[topCategory].toLowerCase();
   const topShare = Math.round((result.breakdown[topCategory] / totalMonthly) * 100);

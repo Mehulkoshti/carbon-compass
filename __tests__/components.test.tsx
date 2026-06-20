@@ -8,10 +8,7 @@ import { ProgressTracker } from '@/components/ProgressTracker';
 describe('DonutChart', () => {
   it('exposes the data in an accessible table', () => {
     render(
-      <DonutChart
-        breakdown={{ transport: 200, home: 80, food: 150, lifestyle: 90 }}
-        total={520}
-      />,
+      <DonutChart breakdown={{ transport: 200, home: 80, food: 150, lifestyle: 90 }} total={520} />,
     );
     // Screen-reader table with a caption and the category values.
     expect(screen.getByText(/Carbon footprint by category/i)).toBeInTheDocument();

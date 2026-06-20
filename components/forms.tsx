@@ -1,5 +1,10 @@
 'use client';
 
+/**
+ * Accessible, reusable form primitives (number input, range slider, select and
+ * radio group). Each control wires up labels, ids and ARIA so pages can compose
+ * forms without repeating accessibility boilerplate.
+ */
 import { useId } from 'react';
 
 interface NumberFieldProps {
@@ -13,6 +18,7 @@ interface NumberFieldProps {
   hint?: string;
 }
 
+/** Labelled numeric input with an optional unit and hint. */
 export function NumberField({
   label,
   value,
@@ -62,15 +68,8 @@ interface RangeFieldProps {
   unit?: string;
 }
 
-export function RangeField({
-  label,
-  value,
-  onChange,
-  min,
-  max,
-  step = 1,
-  unit,
-}: RangeFieldProps) {
+/** Accessible range slider showing its current value and unit. */
+export function RangeField({ label, value, onChange, min, max, step = 1, unit }: RangeFieldProps) {
   const id = useId();
   return (
     <div>
@@ -105,6 +104,7 @@ interface SelectFieldProps<T extends string> {
   hint?: string;
 }
 
+/** Labelled select dropdown, typed to its option values. */
 export function SelectField<T extends string>({
   label,
   value,
@@ -153,6 +153,7 @@ interface RadioGroupProps<T extends string> {
   onChange: (v: T) => void;
 }
 
+/** Accessible radio-button group rendered as selectable cards. */
 export function RadioGroup<T extends string>({
   legend,
   value,

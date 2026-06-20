@@ -36,7 +36,10 @@ const validProfile = {
 function jsonReq(body: unknown) {
   return new Request('http://localhost/api', {
     method: 'POST',
-    headers: { 'content-type': 'application/json', 'x-forwarded-for': `1.2.3.${Math.floor(Math.random() * 250)}` },
+    headers: {
+      'content-type': 'application/json',
+      'x-forwarded-for': `1.2.3.${Math.floor(Math.random() * 250)}`,
+    },
     body: JSON.stringify(body),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   }) as any;
@@ -181,7 +184,11 @@ describe('POST /api/plan', () => {
     vi.mocked(generate).mockResolvedValue(
       JSON.stringify({
         weeks: [
-          { week: 1, theme: 'Quick wins', tasks: [{ title: 'Carpool', detail: 'd', category: 'transport', estSaving: 30 }] },
+          {
+            week: 1,
+            theme: 'Quick wins',
+            tasks: [{ title: 'Carpool', detail: 'd', category: 'transport', estSaving: 30 }],
+          },
         ],
       }),
     );

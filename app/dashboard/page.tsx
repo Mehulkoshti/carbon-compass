@@ -77,16 +77,13 @@ export default function DashboardPage() {
     [committed, profile, result],
   );
 
-  const toggle = useCallback(
-    (id: string) => {
-      setCommitted((prev) => {
-        const next = prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id];
-        storage.saveActions(next);
-        return next;
-      });
-    },
-    [],
-  );
+  const toggle = useCallback((id: string) => {
+    setCommitted((prev) => {
+      const next = prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id];
+      storage.saveActions(next);
+      return next;
+    });
+  }, []);
 
   const currentMonth = monthKey(new Date());
   const savedThisMonth = history.some((h) => h.month === currentMonth);

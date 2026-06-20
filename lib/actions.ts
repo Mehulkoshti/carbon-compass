@@ -47,8 +47,7 @@ export const ACTIONS: ReductionAction[] = [
   {
     id: 'switch-to-ev',
     title: 'Switch to an electric vehicle',
-    description:
-      'Replacing a petrol/diesel vehicle with an EV cuts most of its per-km emissions.',
+    description: 'Replacing a petrol/diesel vehicle with an EV cuts most of its per-km emissions.',
     category: 'transport',
     effort: 'ambitious',
     estimateSaving: (p) => {
@@ -139,11 +138,7 @@ export function rankActions(p: UserProfile, r: FootprintResult): RankedAction[] 
 }
 
 /** Total monthly saving from a set of committed action ids. */
-export function totalSaving(
-  ids: string[],
-  p: UserProfile,
-  r: FootprintResult,
-): number {
+export function totalSaving(ids: string[], p: UserProfile, r: FootprintResult): number {
   const set = new Set(ids);
   return round(
     ACTIONS.filter((a) => set.has(a.id)).reduce((sum, a) => sum + a.estimateSaving(p, r), 0),

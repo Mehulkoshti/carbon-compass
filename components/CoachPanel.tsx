@@ -8,13 +8,11 @@ const IMPACT_STYLES: Record<string, string> = {
   low: 'bg-slate-100 text-slate-600',
 };
 
-export function CoachPanel({
-  coach,
-  loading,
-}: {
-  coach: CoachResponse | null;
-  loading: boolean;
-}) {
+/**
+ * Renders the personalized coaching summary and prioritized insights, with a
+ * loading state and a source badge (AI vs rule-based).
+ */
+export function CoachPanel({ coach, loading }: { coach: CoachResponse | null; loading: boolean }) {
   return (
     <section
       aria-labelledby="coach-heading"

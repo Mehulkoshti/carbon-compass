@@ -13,6 +13,11 @@ const SUGGESTIONS = [
   'Is my footprint good or bad?',
 ];
 
+/**
+ * Floating, app-style chat widget (launcher + slide-up panel) available on every
+ * page. Sends the user's saved profile and conversation to /api/chat so replies
+ * are grounded in their own footprint; manages focus and Escape-to-close.
+ */
 export function FloatingChat() {
   const [open, setOpen] = useState(false);
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -144,8 +149,8 @@ export function FloatingChat() {
               <>
                 {messages.length === 0 ? (
                   <div className="rounded-2xl rounded-tl-sm bg-white px-4 py-2 text-sm text-slate-700 shadow-sm">
-                    Hi! 🌱 I&apos;m your carbon coach. Ask me anything about your footprint —
-                    or tap a suggestion below.
+                    Hi! 🌱 I&apos;m your carbon coach. Ask me anything about your footprint — or tap
+                    a suggestion below.
                   </div>
                 ) : (
                   messages.map((m, i) => (

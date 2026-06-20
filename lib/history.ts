@@ -27,9 +27,7 @@ export function previousMonth(month: string): string {
 /** Upsert an entry by month, keeping the list sorted ascending and capped. */
 export function addEntry(history: HistoryEntry[], entry: HistoryEntry): HistoryEntry[] {
   const others = history.filter((h) => h.month !== entry.month);
-  return [...others, entry]
-    .sort((a, b) => a.month.localeCompare(b.month))
-    .slice(-MAX_ENTRIES);
+  return [...others, entry].sort((a, b) => a.month.localeCompare(b.month)).slice(-MAX_ENTRIES);
 }
 
 export function latestEntry(history: HistoryEntry[]): HistoryEntry | null {
@@ -39,11 +37,11 @@ export function latestEntry(history: HistoryEntry[]): HistoryEntry | null {
 
 /** Consecutive months with a check-in, counting back from the most recent. */
 export function computeStreak(history: HistoryEntry[]): number {
-  if (history.length === 0) return 0;
+  const latest = latestEntry(history);
+  if (!latest) return 0;
   const months = new Set(history.map((h) => h.month));
-  const latest = latestEntry(history)!.month;
   let streak = 0;
-  let cursor = latest;
+  let cursor = latest.month;
   while (months.has(cursor)) {
     streak += 1;
     cursor = previousMonth(cursor);

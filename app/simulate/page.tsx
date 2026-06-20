@@ -6,12 +6,7 @@ import { useEffect, useState } from 'react';
 import { CountUp } from '@/components/CountUp';
 import { Gauge } from '@/components/Gauge';
 import { RangeField, SelectField } from '@/components/forms';
-import {
-  calculateFootprint,
-  CATEGORY_LABELS,
-  Category,
-  UserProfile,
-} from '@/lib/emissions';
+import { calculateFootprint, CATEGORY_LABELS, Category, UserProfile } from '@/lib/emissions';
 import { storage } from '@/lib/storage';
 
 const DIET_OPTIONS = [
@@ -72,9 +67,7 @@ export default function SimulatePage() {
   const simResult = calculateFootprint(scenario);
   const delta = Math.round((simResult.totalMonthly - baseResult.totalMonthly) * 10) / 10;
   const pctChange =
-    baseResult.totalMonthly > 0
-      ? Math.round((delta / baseResult.totalMonthly) * 100)
-      : 0;
+    baseResult.totalMonthly > 0 ? Math.round((delta / baseResult.totalMonthly) * 100) : 0;
 
   const setT = (patch: Partial<UserProfile['transport']>) =>
     setScenario((s) => (s ? { ...s, transport: { ...s.transport, ...patch } } : s));
@@ -152,9 +145,7 @@ export default function SimulatePage() {
           <SelectField
             label="Shopping habit"
             value={scenario.lifestyle.shopping}
-            onChange={(shopping) =>
-              setScenario((s) => (s ? { ...s, lifestyle: { shopping } } : s))
-            }
+            onChange={(shopping) => setScenario((s) => (s ? { ...s, lifestyle: { shopping } } : s))}
             options={SHOPPING_OPTIONS.map((o) => ({ value: o.value, label: o.label }))}
           />
         </div>
@@ -187,8 +178,8 @@ export default function SimulatePage() {
               ) : (
                 <>
                   {delta < 0 ? '▼ ' : '▲ '}
-                  <CountUp value={Math.abs(delta)} decimals={1} /> kg/mo (
-                  {Math.abs(pctChange)}% {delta < 0 ? 'less' : 'more'})
+                  <CountUp value={Math.abs(delta)} decimals={1} /> kg/mo ({Math.abs(pctChange)}%{' '}
+                  {delta < 0 ? 'less' : 'more'})
                 </>
               )}
             </div>
@@ -202,9 +193,7 @@ export default function SimulatePage() {
                 </div>
               ))}
             </dl>
-            <p className="mt-4 text-xs text-slate-400">
-              Current: {baseResult.totalMonthly} kg/mo
-            </p>
+            <p className="mt-4 text-xs text-slate-400">Current: {baseResult.totalMonthly} kg/mo</p>
           </div>
         </aside>
       </div>

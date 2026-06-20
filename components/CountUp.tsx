@@ -6,8 +6,7 @@ const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
 
 function prefersReducedMotion(): boolean {
   return (
-    typeof window !== 'undefined' &&
-    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
   );
 }
 

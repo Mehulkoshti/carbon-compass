@@ -14,6 +14,11 @@ function readAsDataUrl(file: File): Promise<string> {
   });
 }
 
+/**
+ * Uploads an electricity-bill photo to the Vision endpoint and reports the
+ * detected monthly kWh back to the parent via `onExtract`. Validates type/size
+ * client-side and surfaces status to the user.
+ */
 export function BillScan({ onExtract }: { onExtract: (kwh: number) => void }) {
   const inputId = useId();
   const [status, setStatus] = useState<'idle' | 'loading' | 'ok' | 'error'>('idle');

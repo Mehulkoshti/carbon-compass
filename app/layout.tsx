@@ -60,66 +60,66 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${inter.variable} ${sora.variable}`}>
       <body className="flex min-h-screen flex-col font-sans">
         <ToastProvider>
-        <a href="#main" className="skip-link">
-          Skip to main content
-        </a>
+          <a href="#main" className="skip-link">
+            Skip to main content
+          </a>
 
-        <header className="sticky top-0 z-40 border-b border-brand-100/70 bg-white/80 backdrop-blur-md">
-          <nav
-            aria-label="Primary"
-            className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3"
-          >
-            <Link
-              href="/"
-              className="flex shrink-0 items-center gap-2 font-display text-lg font-bold text-brand-700"
+          <header className="sticky top-0 z-40 border-b border-brand-100/70 bg-white/80 backdrop-blur-md">
+            <nav
+              aria-label="Primary"
+              className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3"
             >
-              <Image
-                src="/icon-192.png"
-                alt=""
-                width={32}
-                height={32}
-                priority
-                className="h-8 w-8 rounded-lg shadow-soft"
-              />
-              <span>CarbonCompass</span>
-            </Link>
-            <div className="hidden items-center gap-0.5 text-sm font-medium sm:flex">
-              {[
-                ['/calculator', 'Calculator'],
-                ['/simulate', 'Simulate'],
-                ['/plan', 'Plan'],
-                ['/dashboard', 'Dashboard'],
-              ].map(([href, label]) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className="rounded-lg px-3 py-1.5 text-slate-600 transition hover:bg-brand-50 hover:text-brand-700"
-                >
-                  {label}
-                </Link>
-              ))}
+              <Link
+                href="/"
+                className="flex shrink-0 items-center gap-2 font-display text-lg font-bold text-brand-700"
+              >
+                <Image
+                  src="/icon-192.png"
+                  alt=""
+                  width={32}
+                  height={32}
+                  priority
+                  className="h-8 w-8 rounded-lg shadow-soft"
+                />
+                <span>CarbonCompass</span>
+              </Link>
+              <div className="hidden items-center gap-0.5 text-sm font-medium sm:flex">
+                {[
+                  ['/calculator', 'Calculator'],
+                  ['/simulate', 'Simulate'],
+                  ['/plan', 'Plan'],
+                  ['/dashboard', 'Dashboard'],
+                ].map(([href, label]) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    className="rounded-lg px-3 py-1.5 text-slate-600 transition hover:bg-brand-50 hover:text-brand-700"
+                  >
+                    {label}
+                  </Link>
+                ))}
+              </div>
+            </nav>
+          </header>
+
+          <main id="main" className="mx-auto w-full max-w-5xl flex-1 px-4 pt-10 pb-28 sm:pb-10">
+            {children}
+          </main>
+
+          <footer className="border-t border-brand-100 bg-white">
+            <div className="mx-auto max-w-5xl px-4 pb-24 pt-6 text-sm text-slate-500 sm:pb-6">
+              <p>
+                CarbonCompass · Estimates are for awareness only. Built for the Carbon Footprint
+                Awareness challenge.
+              </p>
             </div>
-          </nav>
-        </header>
+          </footer>
 
-        <main id="main" className="mx-auto w-full max-w-5xl flex-1 px-4 pt-10 pb-28 sm:pb-10">
-          {children}
-        </main>
-
-        <footer className="border-t border-brand-100 bg-white">
-          <div className="mx-auto max-w-5xl px-4 pb-24 pt-6 text-sm text-slate-500 sm:pb-6">
-            <p>
-              CarbonCompass · Estimates are for awareness only. Built for the
-              Carbon Footprint Awareness challenge.
-            </p>
-          </div>
-        </footer>
-
-        {/* Floating AI coach, available on every page */}
-        <FloatingChat />
-        {/* App-style bottom tab bar (mobile only) */}
-        <BottomNav />
-        <ServiceWorkerRegister />
+          {/* Floating AI coach, available on every page */}
+          <FloatingChat />
+          {/* App-style bottom tab bar (mobile only) */}
+          <BottomNav />
+          <ServiceWorkerRegister />
         </ToastProvider>
       </body>
     </html>

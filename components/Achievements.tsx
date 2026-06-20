@@ -2,6 +2,7 @@
 
 import { Badge, earnedCount } from '@/lib/achievements';
 
+/** Displays the user's earned and locked achievement badges with a progress count. */
 export function Achievements({ badges }: { badges: Badge[] }) {
   const earned = earnedCount(badges);
 
@@ -24,16 +25,11 @@ export function Achievements({ badges }: { badges: Badge[] }) {
           <li
             key={b.id}
             className={`flex items-start gap-3 rounded-xl border p-3 transition ${
-              b.earned
-                ? 'border-brand-200 bg-brand-50'
-                : 'border-slate-100 bg-slate-50 opacity-60'
+              b.earned ? 'border-brand-200 bg-brand-50' : 'border-slate-100 bg-slate-50 opacity-60'
             }`}
             title={b.description}
           >
-            <span
-              aria-hidden="true"
-              className={`text-2xl ${b.earned ? '' : 'grayscale'}`}
-            >
+            <span aria-hidden="true" className={`text-2xl ${b.earned ? '' : 'grayscale'}`}>
               {b.earned ? b.icon : '🔒'}
             </span>
             <span>

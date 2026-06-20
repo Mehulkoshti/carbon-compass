@@ -13,12 +13,7 @@
 import { gridFactorFor } from './states';
 
 export type CarFuel = 'none' | 'petrol' | 'diesel' | 'ev';
-export type DietType =
-  | 'vegan'
-  | 'vegetarian'
-  | 'eggetarian'
-  | 'moderate_meat'
-  | 'heavy_meat';
+export type DietType = 'vegan' | 'vegetarian' | 'eggetarian' | 'moderate_meat' | 'heavy_meat';
 export type ShoppingLevel = 'minimal' | 'average' | 'frequent';
 
 export type Category = 'transport' | 'home' | 'food' | 'lifestyle';

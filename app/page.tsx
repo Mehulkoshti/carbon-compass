@@ -176,8 +176,8 @@ export default function Home() {
             </span>
           </h1>
           <p className="mt-5 max-w-xl text-lg text-slate-600">
-            Small choices add up. CarbonCompass turns your everyday habits into a
-            clear number, then gives you AI-personalized tools to bring it down.
+            Small choices add up. CarbonCompass turns your everyday habits into a clear number, then
+            gives you AI-personalized tools to bring it down.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
@@ -216,7 +216,10 @@ export default function Home() {
                       <span>{value} kg</span>
                     </div>
                     <div className="mt-0.5 h-2 w-full overflow-hidden rounded-full bg-slate-100">
-                      <div className={`h-full rounded-full ${color}`} style={{ width: `${value}%` }} />
+                      <div
+                        className={`h-full rounded-full ${color}`}
+                        style={{ width: `${value}%` }}
+                      />
                     </div>
                   </li>
                 ))}
@@ -231,7 +234,10 @@ export default function Home() {
 
       {/* How it works */}
       <section aria-labelledby="how-it-works">
-        <h2 id="how-it-works" className="text-center font-display text-3xl font-bold text-slate-900">
+        <h2
+          id="how-it-works"
+          className="text-center font-display text-3xl font-bold text-slate-900"
+        >
           How it works
         </h2>
         <ol className="mt-8 grid gap-6 sm:grid-cols-3">
@@ -260,8 +266,8 @@ export default function Home() {
             Everything you can do
           </h2>
           <p className="mx-auto mt-2 max-w-2xl text-slate-600">
-            A complete toolkit — measure accurately, understand deeply, and reduce
-            with AI guidance. Here&apos;s what&apos;s inside and how to use it.
+            A complete toolkit — measure accurately, understand deeply, and reduce with AI guidance.
+            Here&apos;s what&apos;s inside and how to use it.
           </p>
         </div>
 
@@ -330,9 +336,21 @@ export default function Home() {
       {/* Extra: install + privacy */}
       <section className="grid gap-4 sm:grid-cols-3">
         {[
-          ['📱', 'Installable app', 'Add CarbonCompass to your home screen — it works offline as a PWA.'],
-          ['🔒', 'Private by design', 'No account, no database. Your data never leaves your browser.'],
-          ['♿', 'Accessible', 'Keyboard-friendly, screen-reader ready, with reduced-motion support.'],
+          [
+            '📱',
+            'Installable app',
+            'Add CarbonCompass to your home screen — it works offline as a PWA.',
+          ],
+          [
+            '🔒',
+            'Private by design',
+            'No account, no database. Your data never leaves your browser.',
+          ],
+          [
+            '♿',
+            'Accessible',
+            'Keyboard-friendly, screen-reader ready, with reduced-motion support.',
+          ],
         ].map(([icon, title, body]) => (
           <div key={title} className="rounded-2xl border border-brand-100 bg-white p-5 shadow-soft">
             <span aria-hidden="true" className="text-2xl">

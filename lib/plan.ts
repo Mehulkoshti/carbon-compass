@@ -63,7 +63,9 @@ export function buildRuleBasedPlan(profile: UserProfile, result: FootprintResult
 }
 
 export function planTotalSaving(plan: Plan): number {
-  return Math.round(
-    plan.weeks.flatMap((w) => w.tasks).reduce((s, t) => s + (t.estSaving || 0), 0) * 10,
-  ) / 10;
+  return (
+    Math.round(
+      plan.weeks.flatMap((w) => w.tasks).reduce((s, t) => s + (t.estSaving || 0), 0) * 10,
+    ) / 10
+  );
 }

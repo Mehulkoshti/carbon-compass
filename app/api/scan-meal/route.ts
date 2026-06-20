@@ -32,10 +32,7 @@ export async function POST(req: NextRequest) {
   }
 
   if (!geminiAvailable()) {
-    return NextResponse.json(
-      { error: 'Meal scanning needs an AI key.' },
-      { status: 503 },
-    );
+    return NextResponse.json({ error: 'Meal scanning needs an AI key.' }, { status: 503 });
   }
 
   let body: unknown;
@@ -61,10 +58,7 @@ export async function POST(req: NextRequest) {
   );
 
   if (!text) {
-    return NextResponse.json(
-      { error: 'Could not analyze the photo right now.' },
-      { status: 502 },
-    );
+    return NextResponse.json({ error: 'Could not analyze the photo right now.' }, { status: 502 });
   }
 
   try {
@@ -74,7 +68,10 @@ export async function POST(req: NextRequest) {
           .slice(0, 6)
           .map((i) => ({
             name: String(i.name ?? '').slice(0, 60),
-            kg: typeof i.kg === 'number' && i.kg >= 0 && i.kg < 1000 ? Math.round(i.kg * 100) / 100 : 0,
+            kg:
+              typeof i.kg === 'number' && i.kg >= 0 && i.kg < 1000
+                ? Math.round(i.kg * 100) / 100
+                : 0,
           }))
           .filter((i) => i.name)
       : [];

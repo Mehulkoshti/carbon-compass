@@ -47,16 +47,23 @@ Exactly 4 weeks. 2-3 tasks per week. Start with the easiest, highest-impact chan
     const weeks: PlanWeek[] = parsed.weeks.slice(0, 4).map((w, wi) => ({
       week: wi + 1,
       theme: String(w.theme ?? `Week ${wi + 1}`).slice(0, 60),
-      tasks: (Array.isArray(w.tasks) ? w.tasks : []).slice(0, 3).map((t, ti): PlanTask => ({
-        id: `w${wi + 1}-${ti}`,
-        title: String(t.title ?? '').slice(0, 100),
-        detail: String(t.detail ?? '').slice(0, 240),
-        category: (CATEGORIES.includes(t.category) ? t.category : 'habit') as PlanTask['category'],
-        estSaving:
-          typeof t.estSaving === 'number' && t.estSaving >= 0 && t.estSaving < 10000
-            ? Math.round(t.estSaving * 10) / 10
-            : 0,
-      })).filter((t) => t.title),
+      tasks: (Array.isArray(w.tasks) ? w.tasks : [])
+        .slice(0, 3)
+        .map(
+          (t, ti): PlanTask => ({
+            id: `w${wi + 1}-${ti}`,
+            title: String(t.title ?? '').slice(0, 100),
+            detail: String(t.detail ?? '').slice(0, 240),
+            category: (CATEGORIES.includes(t.category)
+              ? t.category
+              : 'habit') as PlanTask['category'],
+            estSaving:
+              typeof t.estSaving === 'number' && t.estSaving >= 0 && t.estSaving < 10000
+                ? Math.round(t.estSaving * 10) / 10
+                : 0,
+          }),
+        )
+        .filter((t) => t.title),
     }));
 
     if (weeks.every((w) => w.tasks.length === 0)) return null;

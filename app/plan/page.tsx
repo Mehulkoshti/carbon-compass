@@ -140,7 +140,9 @@ export default function PlanPage() {
                 <li key={t.id}>
                   <label
                     className={`flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition ${
-                      checked ? 'border-brand-600 bg-brand-50' : 'border-slate-200 hover:border-brand-400'
+                      checked
+                        ? 'border-brand-600 bg-brand-50'
+                        : 'border-slate-200 hover:border-brand-400'
                     }`}
                   >
                     <input
@@ -151,7 +153,9 @@ export default function PlanPage() {
                     />
                     <span className="flex-1">
                       <span className="flex flex-wrap items-center gap-2">
-                        <span className={`font-semibold ${checked ? 'text-slate-500 line-through' : 'text-slate-900'}`}>
+                        <span
+                          className={`font-semibold ${checked ? 'text-slate-500 line-through' : 'text-slate-900'}`}
+                        >
                           {t.title}
                         </span>
                         {t.estSaving > 0 ? (

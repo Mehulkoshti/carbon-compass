@@ -73,9 +73,7 @@ export async function POST(req: NextRequest) {
         : null;
     return NextResponse.json({
       kwh,
-      confidence: ['high', 'medium', 'low'].includes(out.confidence ?? '')
-        ? out.confidence
-        : 'low',
+      confidence: ['high', 'medium', 'low'].includes(out.confidence ?? '') ? out.confidence : 'low',
       note: String(out.note ?? '').slice(0, 200),
     });
   } catch {

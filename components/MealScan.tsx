@@ -21,6 +21,10 @@ function readAsDataUrl(file: File): Promise<string> {
   });
 }
 
+/**
+ * Uploads a meal/grocery photo to the Vision endpoint and shows an itemized
+ * food-carbon estimate. Validates type/size client-side; toasts on result.
+ */
 export function MealScan() {
   const inputId = useId();
   const toast = useToast();
@@ -54,7 +58,10 @@ export function MealScan() {
         setItems(data.items);
         setTotal(data.totalKg ?? 0);
         setNote(data.note ?? '');
-        toast(data.items.length ? 'Meal analyzed' : 'No food detected', data.items.length ? 'success' : 'info');
+        toast(
+          data.items.length ? 'Meal analyzed' : 'No food detected',
+          data.items.length ? 'success' : 'info',
+        );
       } else {
         toast(data?.error || 'Could not analyze the photo.', 'error');
       }

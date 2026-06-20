@@ -41,7 +41,14 @@ export function Gauge({
         role="img"
         aria-label={`${value.toFixed(decimals)} ${unit ?? ''}`}
       >
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#d1fae5" strokeWidth={stroke} />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={r}
+          fill="none"
+          stroke="#d1fae5"
+          strokeWidth={stroke}
+        />
         <circle
           cx={size / 2}
           cy={size / 2}

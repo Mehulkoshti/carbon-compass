@@ -8,6 +8,10 @@ const EFFORT_LABEL: Record<string, string> = {
   ambitious: 'Ambitious',
 };
 
+/**
+ * Lets the user commit to reduction actions and shows the projected footprint
+ * and percentage cut updating live as actions are toggled.
+ */
 export function ActionTracker({
   actions,
   committed,
@@ -37,14 +41,10 @@ export function ActionTracker({
         Commit to changes and watch your projected footprint drop.
       </p>
 
-      <div
-        className="mt-4 rounded-lg bg-brand-50 p-4"
-        role="status"
-        aria-live="polite"
-      >
+      <div className="mt-4 rounded-lg bg-brand-50 p-4" role="status" aria-live="polite">
         <p className="text-sm text-brand-700">
-          Saving <strong>{totalSaved} kg CO₂e / month</strong> ({pctCut}% cut).
-          Projected footprint: <strong>{projected} kg/month</strong>.
+          Saving <strong>{totalSaved} kg CO₂e / month</strong> ({pctCut}% cut). Projected footprint:{' '}
+          <strong>{projected} kg/month</strong>.
         </p>
       </div>
 
@@ -55,7 +55,9 @@ export function ActionTracker({
             <li key={a.id}>
               <label
                 className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition ${
-                  checked ? 'border-brand-600 bg-brand-50' : 'border-slate-200 hover:border-brand-400'
+                  checked
+                    ? 'border-brand-600 bg-brand-50'
+                    : 'border-slate-200 hover:border-brand-400'
                 }`}
               >
                 <input

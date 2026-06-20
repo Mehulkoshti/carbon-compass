@@ -42,8 +42,21 @@ export function DonutChart({ breakdown, total }: { breakdown: Breakdown; total: 
     <div className="flex flex-col items-center gap-6 sm:flex-row">
       {/* Donut */}
       <div className="relative shrink-0" style={{ width: size, height: size }}>
-        <svg width={size} height={size} className="-rotate-90" role="img" aria-label="Footprint breakdown donut chart">
-          <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#f1f5f9" strokeWidth={stroke} />
+        <svg
+          width={size}
+          height={size}
+          className="-rotate-90"
+          role="img"
+          aria-label="Footprint breakdown donut chart"
+        >
+          <circle
+            cx={size / 2}
+            cy={size / 2}
+            r={r}
+            fill="none"
+            stroke="#f1f5f9"
+            strokeWidth={stroke}
+          />
           {segments.map((s) => (
             <circle
               key={s.key}
