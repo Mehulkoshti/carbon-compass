@@ -1,7 +1,16 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { Inter, Sora } from 'next/font/google';
 import { FloatingChat } from '@/components/FloatingChat';
 import './globals.css';
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
+const sora = Sora({
+  subsets: ['latin'],
+  variable: '--font-sora',
+  display: 'swap',
+  weight: ['600', '700', '800'],
+});
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ||
@@ -33,35 +42,44 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className="min-h-screen flex flex-col">
+    <html lang="en" className={`${inter.variable} ${sora.variable}`}>
+      <body className="flex min-h-screen flex-col font-sans">
         <a href="#main" className="skip-link">
           Skip to main content
         </a>
 
-        <header className="border-b border-brand-100 bg-white">
+        <header className="sticky top-0 z-40 border-b border-brand-100/70 bg-white/80 backdrop-blur-md">
           <nav
             aria-label="Primary"
             className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3"
           >
-            <Link href="/" className="flex items-center gap-2 font-bold text-brand-700">
-              <span aria-hidden="true" className="text-xl">
+            <Link href="/" className="flex items-center gap-2 font-display text-lg font-bold text-brand-700">
+              <span
+                aria-hidden="true"
+                className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 text-base shadow-soft"
+              >
                 🧭
               </span>
               CarbonCompass
             </Link>
-            <div className="flex items-center gap-4 text-sm font-medium">
-              <Link href="/calculator" className="hover:text-brand-700">
+            <div className="flex items-center gap-1 text-sm font-medium">
+              <Link
+                href="/calculator"
+                className="rounded-lg px-3 py-1.5 text-slate-600 transition hover:bg-brand-50 hover:text-brand-700"
+              >
                 Calculator
               </Link>
-              <Link href="/dashboard" className="hover:text-brand-700">
+              <Link
+                href="/dashboard"
+                className="rounded-lg px-3 py-1.5 text-slate-600 transition hover:bg-brand-50 hover:text-brand-700"
+              >
                 Dashboard
               </Link>
             </div>
           </nav>
         </header>
 
-        <main id="main" className="mx-auto w-full max-w-5xl flex-1 px-4 py-8">
+        <main id="main" className="mx-auto w-full max-w-5xl flex-1 px-4 py-10">
           {children}
         </main>
 

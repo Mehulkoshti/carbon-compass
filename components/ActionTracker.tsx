@@ -28,7 +28,7 @@ export function ActionTracker({
   return (
     <section
       aria-labelledby="actions-heading"
-      className="rounded-xl border border-brand-100 bg-white p-6 shadow-sm"
+      className="rounded-2xl border border-brand-100 bg-white p-6 shadow-soft"
     >
       <h2 id="actions-heading" className="text-xl font-bold text-slate-900">
         ✅ Track your actions

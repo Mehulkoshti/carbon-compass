@@ -11,7 +11,20 @@ html {
 }
 
 body {
-  @apply bg-brand-50 text-slate-800 antialiased;
+  @apply text-slate-800 antialiased;
+  background:
+    radial-gradient(1100px 520px at 100% -8%, #d1fae5 0%, transparent 58%),
+    radial-gradient(900px 500px at -10% 6%, #e7fff4 0%, transparent 52%),
+    #f6fdfa;
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-sora), system-ui, sans-serif;
+  letter-spacing: -0.02em;
 }
 
 /* Visible focus ring for keyboard users (accessibility). */

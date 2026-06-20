@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ActionTracker } from '@/components/ActionTracker';
 import { BarChart } from '@/components/BarChart';
 import { CoachPanel } from '@/components/CoachPanel';
+import { Gauge } from '@/components/Gauge';
 import { ProgressTracker } from '@/components/ProgressTracker';
 import { ShareResult } from '@/components/ShareResult';
 import { rankActions, totalSaving } from '@/lib/actions';
@@ -143,19 +144,27 @@ export default function DashboardPage() {
 
       {/* Headline numbers */}
       <div className="grid gap-4 sm:grid-cols-3">
-        <div className="rounded-xl bg-brand-900 p-6 text-brand-50">
-          <p className="text-sm text-brand-100">Your footprint</p>
-          <p className="text-3xl font-extrabold">{result.totalMonthly} kg</p>
-          <p className="text-sm text-brand-100">CO₂e / month</p>
+        <div className="flex flex-col items-center rounded-2xl border border-brand-100 bg-white p-6 text-center shadow-soft">
+          <Gauge
+            pct={comparison.vsParisPct}
+            centerValue={`${result.totalMonthly}`}
+            centerUnit="kg/mo"
+            size={150}
+          />
+          <p className="mt-3 text-sm text-slate-500">Your monthly footprint</p>
         </div>
-        <div className="rounded-xl border border-brand-100 bg-white p-6">
+        <div className="flex flex-col justify-center rounded-2xl border border-brand-100 bg-white p-6 shadow-soft">
           <p className="text-sm text-slate-500">vs India average</p>
-          <p className="text-3xl font-extrabold text-slate-900">{comparison.vsIndiaPct}%</p>
+          <p className="font-display text-4xl font-extrabold text-slate-900">
+            {comparison.vsIndiaPct}%
+          </p>
           <p className="text-sm text-slate-500">{comparison.indiaAvg} kg/mo average</p>
         </div>
-        <div className="rounded-xl border border-brand-100 bg-white p-6">
+        <div className="flex flex-col justify-center rounded-2xl border border-brand-100 bg-white p-6 shadow-soft">
           <p className="text-sm text-slate-500">vs sustainable target</p>
-          <p className="text-3xl font-extrabold text-slate-900">{comparison.vsParisPct}%</p>
+          <p className="font-display text-4xl font-extrabold text-slate-900">
+            {comparison.vsParisPct}%
+          </p>
           <p className="text-sm text-slate-500">{comparison.parisTarget} kg/mo target</p>
         </div>
       </div>
@@ -163,7 +172,7 @@ export default function DashboardPage() {
       <div className="grid gap-8 lg:grid-cols-2">
         <section
           aria-labelledby="breakdown-heading"
-          className="rounded-xl border border-brand-100 bg-white p-6 shadow-sm"
+          className="rounded-2xl border border-brand-100 bg-white p-6 shadow-soft"
         >
           <h2 id="breakdown-heading" className="text-xl font-bold text-slate-900">
             Where it comes from

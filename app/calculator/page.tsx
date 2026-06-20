@@ -4,9 +4,10 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { BillScan } from '@/components/BillScan';
+import { Gauge } from '@/components/Gauge';
 import { NumberField, RadioGroup, SelectField } from '@/components/forms';
 import { DEFAULT_PROFILE } from '@/lib/defaults';
-import { calculateFootprint, UserProfile } from '@/lib/emissions';
+import { calculateFootprint, CATEGORY_LABELS, UserProfile } from '@/lib/emissions';
 import { userProfileSchema } from '@/lib/schema';
 import { GRID_REGIONS } from '@/lib/states';
 import { storage } from '@/lib/storage';
@@ -35,16 +36,20 @@ export default function CalculatorPage() {
     router.push('/dashboard');
   }
 
+  const live = calculateFootprint(profile);
+
   return (
-    <div className="mx-auto max-w-2xl">
-      <h1 className="text-3xl font-bold text-slate-900">Footprint calculator</h1>
+    <div className="mx-auto max-w-5xl">
+      <h1 className="font-display text-3xl font-bold text-slate-900">Footprint calculator</h1>
       <p className="mt-1 text-slate-600">
         Four quick steps. Defaults reflect a typical urban household — adjust to
         match your life.
       </p>
 
+      <div className="mt-8 grid items-start gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2">
       {/* Progress */}
-      <ol className="mt-6 flex gap-2" aria-label="Progress">
+      <ol className="flex gap-2" aria-label="Progress">
         {STEPS.map((label, i) => (
           <li key={label} className="flex-1">
             <div
@@ -58,9 +63,9 @@ export default function CalculatorPage() {
 
       <section
         aria-labelledby="step-heading"
-        className="mt-6 space-y-5 rounded-xl border border-brand-100 bg-white p-6 shadow-sm"
+        className="mt-6 space-y-5 rounded-2xl border border-brand-100 bg-white p-6 shadow-soft"
       >
-        <h2 id="step-heading" className="text-xl font-semibold text-slate-900">
+        <h2 id="step-heading" className="font-display text-xl font-semibold text-slate-900">
           {STEPS[step]}
         </h2>
 
@@ -225,6 +230,38 @@ export default function CalculatorPage() {
           )}
         </div>
       </section>
+        </div>
+
+        {/* Live estimate side panel */}
+        <aside className="lg:sticky lg:top-24" aria-live="polite">
+          <div className="rounded-2xl border border-brand-100 bg-white p-6 shadow-soft">
+            <p className="text-sm font-medium text-slate-500">Live estimate</p>
+            <div className="mt-3 flex flex-col items-center">
+              <Gauge
+                pct={live.comparison.vsParisPct}
+                centerValue={`${live.totalMonthly}`}
+                centerUnit="kg/mo"
+                size={160}
+              />
+              <p className="mt-3 text-center text-sm text-slate-500">
+                {live.comparison.vsIndiaPct}% of the India average
+              </p>
+            </div>
+            <dl className="mt-4 space-y-2 text-sm">
+              {(['transport', 'home', 'food', 'lifestyle'] as const).map((k) => (
+                <div key={k} className="flex justify-between">
+                  <dt className="text-slate-500">{CATEGORY_LABELS[k]}</dt>
+                  <dd className="font-medium text-slate-700">{live.breakdown[k]} kg</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-4 rounded-xl bg-brand-50 p-3 text-xs text-brand-700">
+              💡 Updates as you answer. Biggest source:{' '}
+              <strong>{CATEGORY_LABELS[live.topCategory]}</strong>.
+            </p>
+          </div>
+        </aside>
+      </div>
     </div>
   );
 }

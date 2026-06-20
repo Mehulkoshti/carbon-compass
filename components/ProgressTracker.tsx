@@ -35,7 +35,7 @@ export function ProgressTracker({
   return (
     <section
       aria-labelledby="progress-heading"
-      className="rounded-xl border border-brand-100 bg-white p-6 shadow-sm"
+      className="rounded-2xl border border-brand-100 bg-white p-6 shadow-soft"
     >
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 id="progress-heading" className="text-xl font-bold text-slate-900">
